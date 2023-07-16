@@ -104,16 +104,18 @@ void GLViewNewModule::updateWorld()
         //theGUI->elapsedTime += 0.1 (GL_TIME_ELAPSED / 2296459.2);
         theGUI->elapsedTime += 0.01667;
     }
-    if (cam->getPosition().x > 411 && cam->getPosition().x < 1130 && cam->getPosition().y > -1444 && cam->getPosition().y < 724
-        && cam->getPosition().z > -45 && cam->getPosition().z < 700)
+    if (cam->getPosition().x > 411 && cam->getPosition().x < 1130 && cam->getPosition().y > -1444 && cam->getPosition().y < -744
+        && cam->getPosition().z > -45 && cam->getPosition().z < 700 && firstCheck == false)
     {
         firstCheck = true;
+        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        std::cout << "here" << std::endl;
     }
 
    //************ Vehicle Controls ******************
-   if (pressW == true)
+   if (pressW == true) 
    {
-       auto move = redCube->getPosition();
+       /*auto move = redCube->getPosition();
        move.x += redCube->getLookDirection().x * speed;
        move.y += redCube->getLookDirection().y * speed;
        move.z += redCube->getLookDirection().z * speed;
@@ -123,12 +125,12 @@ void GLViewNewModule::updateWorld()
        move.x += redCube->getLookDirection().x * speed;
        move.y += redCube->getLookDirection().y * speed;
        move.z += redCube->getLookDirection().z * speed;
-       cam->setPosition(move);
+       cam->setPosition(move);*/
 
-       auto curr = cam->getPosition();
+       /*auto curr = cam->getPosition();
        curr.x = curr.x + cam->getLookDirection().x;
        curr.y = curr.y + cam->getLookDirection().y;
-       cam->setPosition(curr);
+       cam->setPosition(curr);*/
    }
    if (pressA == true)
    {
@@ -473,10 +475,20 @@ void Aftr::GLViewNewModule::loadMap()
     checkpoint1->rotateAboutGlobalZ(1);
 
     //checkpoint1 marker
-    marker1 = WO::New(shinyRedPlasticCube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
-    marker1->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
-    marker1->setPosition(1279, -1370, 456);
-    worldLst->push_back(marker1);
+    WO* tmpMarker = WO::New(shinyRedPlasticCube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
+    /*tmpMarker->upon_async_model_loaded([tmpMarker]()
+    {
+        std::string texture(ManagerEnvironmentConfiguration::getLMM() + "/images/green.jpg");
+        ModelMeshSkin skin(ManagerTex::loadTexAsync(texture).value());
+        skin.setMeshShadingType(MESH_SHADING_TYPE::mstAUTO);
+        tmpMarker->getModel()->getModelDataShared()->getModelMeshes().at(0)->addSkin(std::move(skin));
+        tmpMarker->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+
+    });*/
+    tmpMarker->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    tmpMarker->setPosition(1279, -1370, 456);
+    worldLst->push_back(tmpMarker);
+    marker1 = tmpMarker;
 
 
 
