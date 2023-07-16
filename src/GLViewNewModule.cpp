@@ -37,6 +37,8 @@
 
 #include <GL/glew.h>
 
+#include<fstream>
+
 
 
 using namespace Aftr;
@@ -93,32 +95,22 @@ GLViewNewModule::~GLViewNewModule()
 
 void GLViewNewModule::updateWorld()
 {
-   GLView::updateWorld(); //Just call the parent's update world first.
-                          //If you want to add additional functionality, do it after
-                          //this call.
+    GLView::updateWorld(); //Just call the parent's update world first.
+    //If you want to add additional functionality, do it after
+    //this call.
 
-   /*redCube->setPose(cam->getPose());
+    if (theGUI->raceStart == true)
+    {
+        //theGUI->elapsedTime += 0.1 (GL_TIME_ELAPSED / 2296459.2);
+        theGUI->elapsedTime += 0.01667;
+    }
+    if (cam->getPosition().x > 411 && cam->getPosition().x < 1130 && cam->getPosition().y > -1444 && cam->getPosition().y < 724
+        && cam->getPosition().z > -45 && cam->getPosition().z < 700)
+    {
+        firstCheck = true;
+    }
 
-   currLD = cam->getLookDirection();
-   currGP = cam->getPosition();
-   currGP.x += 18;
-   currGP.z -= 7;
-   if (currLD.x < 0)
-   {
-       currGP.x *= -1;
-   }
-   if (currLD.x < 0)
-   {
-       currGP.y *= -1;
-   }
-   if (currLD.x < 0)
-   {
-       currGP.z *= -1;
-   }
-   redCube->setPosition(currGP);*/
-
-
-
+   //************ Vehicle Controls ******************
    if (pressW == true)
    {
        auto move = redCube->getPosition();
@@ -127,15 +119,27 @@ void GLViewNewModule::updateWorld()
        move.z += redCube->getLookDirection().z * speed;
        redCube->setPosition(move);
 
-       /*move = cam->getPosition();
+       move = cam->getPosition();
        move.x += redCube->getLookDirection().x * speed;
        move.y += redCube->getLookDirection().y * speed;
-       cam->setPosition(move);*/
+       move.z += redCube->getLookDirection().z * speed;
+       cam->setPosition(move);
+
+       auto curr = cam->getPosition();
+       curr.x = curr.x + cam->getLookDirection().x;
+       curr.y = curr.y + cam->getLookDirection().y;
+       cam->setPosition(curr);
    }
    if (pressA == true)
    {
-       cam->rotateAboutRelZ(-0.05);
-        redCube->rotateAboutGlobalZ(-0.05);
+       /*cam->rotateAboutGlobalZ(-0.05);
+       redCube->rotateAboutGlobalZ(-0.05);*/
+
+       auto curr = cam->getPosition();
+       auto direction = cam->getDisplayMatrix().getZ();
+       auto next = direction.crossProduct(cam->getLookDirection());
+       curr = curr + next;
+       cam->setPosition(curr);
    }
    if (pressS == true)
    {
@@ -151,6 +155,10 @@ void GLViewNewModule::updateWorld()
        auto nextZ = directionZ.crossProduct(cam->getLookDirection());
        curr = curr - nextZ;
        cam->setPosition(curr);
+       
+
+       //redCube->rotateAboutGlobalZ(0.05);
+       //cam->rotateAboutGlobalZ(0.05);
    }
    if (pressSpace == true)
    {
@@ -238,7 +246,6 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
    if (key.keysym.sym == SDLK_SPACE)
    {
        pressSpace = true;
-
    }
    if (key.keysym.sym == SDLK_LSHIFT)
    {
@@ -254,9 +261,37 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        std::cout << curr.x << std::endl;
        std::cout << curr.y << std::endl;
        std::cout << curr.z << std::endl;
-       std::cout << redCube->getPosition().x << std::endl;
-       std::cout << redCube->getPosition().y << std::endl;
-       std::cout << redCube->getPosition().z << std::endl;
+       curr = cam->getPosition();
+       std::cout << curr.x << std::endl;
+       std::cout << curr.y << std::endl;
+       std::cout << curr.z << std::endl;   
+   }
+   if (key.keysym.sym == SDLK_g)
+   {
+       placeAsteroid(cam->getPosition());
+
+       /*for (size_t i = 0; i < locations.size(); i++)
+       {
+           std::cout << locations.at(i).toString() << std::endl;
+       }*/
+   }
+   if (key.keysym.sym == SDLK_h)
+   {
+       /*td::ofstream outs;
+       outs.open("route.txt");
+       if (outs.fail())
+       {
+           std::cout << "Error: failed to open file" << std::endl;
+           exit(0);
+       }
+       for (size_t i = 0; i < course.size(); i++)
+       {
+           outs << course.at(i) << std::endl;
+       }
+       outs.close();
+       std::cout << "course saved" << std::endl;*/
+       cam->setPosition(Vector(770,-1100, 309));
+       placeCheckpointMarker(cam->getPosition());
    }
 }
 
@@ -296,7 +331,7 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    if (key.keysym.sym == SDLK_f)
    {
        cam->setParentWorldObject(redCube);
-       cam->lockWRTparent();
+       cam->lockWRTparent_using_current_relative_pose();
    }
 }
 
@@ -320,13 +355,16 @@ void Aftr::GLViewNewModule::loadMap()
    std::string grass( ManagerEnvironmentConfiguration::getSMM() + "/models/grassFloor400x400_pp.wrl" );
    std::string human( ManagerEnvironmentConfiguration::getSMM() + "/models/human_chest.wrl" );
    std::string jet(ManagerEnvironmentConfiguration::getSMM() + "/models/jet_wheels_down_PP.wrl");
+   std::string spaceStation(ManagerEnvironmentConfiguration::getSMM() + "/models/spaceStation220x130x160.wrl");
+   std::string startingPillar(ManagerEnvironmentConfiguration::getLMM() + "/models/race_drag_start_and_finish_line.glb");
+   std::string donut(ManagerEnvironmentConfiguration::getLMM() + "/models/donut.glb");
 
    
    //SkyBox Textures readily available
    std::vector< std::string > skyBoxImageNames; //vector to store texture paths
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_water+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_dust+6.jpg" );
-   skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_mountains+6.jpg" );
+   //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_mountains+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_winter+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/early_morning+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_afternoon+6.jpg" );
@@ -348,7 +386,7 @@ void Aftr::GLViewNewModule::loadMap()
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/space_lemon_lime+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/space_milk_chocolate+6.jpg" );
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/space_solar_bloom+6.jpg" );
-   //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/space_thick_rb+6.jpg" );
+   skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/space_thick_rb+6.jpg" );
 
    {
       //Create a light
@@ -391,23 +429,66 @@ void Aftr::GLViewNewModule::loadMap()
       worldLst->push_back( wo );
    }
 
-
- 
+   // player vehicle
     redCube = WO::New(jet, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
-    redCube->setLabel("Nathan's Cube");
     redCube->setPosition(23, 15, 2);
     redCube->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(redCube);
-   /*startCamPose = cam->getPose();
-   startCubePose = redCube->getPose();*/
-    cam->setPosition(5, 15, 9);
-    //cam->setParentWorldObject(redCube);
-    //cam->lockWRTparent_using_current_relative_pose();
+
+    // space station
+    startingLocation = WO::New(spaceStation, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
+    startingLocation->setPosition(67, 175, 21);
+    startingLocation->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(startingLocation);
+
+    // starting pillar thing
+    WO* startingLine = WO::New(startingPillar, Vector(5, 5, 5), MESH_SHADING_TYPE::mstAUTO);
+    startingLine->upon_async_model_loaded([startingLine]()
+    {
+        std::string texture(ManagerEnvironmentConfiguration::getLMM() + "/images/startingLineTexture.jpg");
+        ModelMeshSkin skin(ManagerTex::loadTexAsync(texture).value());
+        skin.setMeshShadingType(MESH_SHADING_TYPE::mstAUTO);
+        startingLine->getModel()->getModelDataShared()->getModelMeshes().at(0)->addSkin(std::move(skin));
+        startingLine->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+    });
+    startingLine->setPosition(100, 0, 20);
+    startingLine->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(startingLine);
+
+    // checkpoint1
+    WO* checkpoint1 = WO::New(donut, Vector(100, 100, 100), MESH_SHADING_TYPE::mstAUTO);
+    checkpoint1->upon_async_model_loaded([checkpoint1]()
+    {
+        std::string texture(ManagerEnvironmentConfiguration::getLMM() + "/images/donutTexture.jpg");
+        ModelMeshSkin skin(ManagerTex::loadTexAsync(texture).value());
+        skin.setMeshShadingType(MESH_SHADING_TYPE::mstAUTO);
+        checkpoint1->getModel()->getModelDataShared()->getModelMeshes().at(0)->addSkin(std::move(skin));
+        checkpoint1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+    });
+    checkpoint1->setPosition(1300, -1280, 343);
+    checkpoint1->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(checkpoint1);
+    holder = checkpoint1;
+    checkpoint1->rotateAboutGlobalX(0.9);
+    checkpoint1->rotateAboutGlobalZ(1);
+
+    //checkpoint1 marker
+    marker1 = WO::New(shinyRedPlasticCube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
+    marker1->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    marker1->setPosition(1279, -1370, 456);
+    worldLst->push_back(marker1);
+
 
 
    createNewModuleWayPoints();
 
    // ADDITIONAL THINGS DONE BY ME
+   cam->setPosition(5, 15, 9); // setting cam starting position
+   buildCourseAsteroidGuide(); // place asteroids
+   
+   theGUI = NathanGUI::New(nullptr, 1, 1);
+   worldLst->push_back(theGUI);
+
    pressW = false;
    pressA = false;
    pressS = false;
@@ -429,4 +510,71 @@ void GLViewNewModule::createNewModuleWayPoints()
    WOWayPointSpherical* wayPt = WOWayPointSpherical::New( params, 3 );
    wayPt->setPosition( Vector( 50, 0, 3 ) );
    worldLst->push_back( wayPt );
+}
+
+void Aftr::GLViewNewModule::placeAsteroid(Vector location)
+{
+    std::string asteroid(ManagerEnvironmentConfiguration::getLMM() + "/models/asteroid.mdl");
+    WO* rock = WO::New(asteroid, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
+    
+    rock->upon_async_model_loaded([rock]()
+        {
+            std::string texture(ManagerEnvironmentConfiguration::getLMM() + "/images/asteroidTexture.jpg");
+    ModelMeshSkin skin(ManagerTex::loadTexAsync(texture).value());
+    skin.setMeshShadingType(MESH_SHADING_TYPE::mstAUTO);
+    rock->getModel()->getModelDataShared()->getModelMeshes().at(0)->addSkin(std::move(skin));
+    rock->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        });
+    
+    auto x = cam->getLookDirection();
+    auto y = cam->getPosition();
+    rock->setPosition(location);
+    rock->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(rock);
+
+    course.push_back(rock->getPosition().toString());
+}
+
+void Aftr::GLViewNewModule::buildCourseAsteroidGuide()
+{
+    std::ifstream ins;
+    ins.open("route.txt");
+    if (ins.fail())
+    {
+        std::cout << "error opening input file" << std::endl;
+    }
+    std::string holder;
+    float one;
+    float two;
+    float three;
+    int index;
+    while (getline(ins, holder))
+    {
+        holder = holder.substr(1, holder.length() - 2);
+        index = holder.find(',');
+        one = std::stof(holder.substr(0, index));
+        holder = holder.substr(index + 1);
+        index = holder.find(',');
+        two = std::stof(holder.substr(0, index));
+        holder = holder.substr(index + 1);
+        three = std::stof(holder);
+        locations.push_back(Vector(one, two, three));
+    }
+    ins.close();
+
+    for (size_t i = 0; i < locations.size(); i++)
+    {
+        placeAsteroid(locations.at(i));
+    }
+}
+void Aftr::GLViewNewModule::placeCheckpointMarker(Vector location)
+{
+    std::string cube(ManagerEnvironmentConfiguration::getSMM() + "/models/cube4x4x4redShinyPlastic_pp.wrl");
+    WO* marker = WO::New(cube, Vector(180, 180, 180), MESH_SHADING_TYPE::mstAUTO);
+    //WO* marker = WO::New(cube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
+    auto x = cam->getLookDirection();
+    auto y = cam->getPosition();
+    marker->setPosition(location);
+    marker->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(marker);
 }

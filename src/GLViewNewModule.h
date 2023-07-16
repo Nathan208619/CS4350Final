@@ -1,10 +1,12 @@
 #pragma once
 
 #include "GLView.h"
+#include "NathanGUI.h"
+
 
 namespace Aftr
 {
-   class Camera;
+    class CameraStandard;
 
 /**
    \class GLViewNewModule
@@ -33,9 +35,19 @@ public:
    virtual void onKeyDown( const SDL_KeyboardEvent& key );
    virtual void onKeyUp( const SDL_KeyboardEvent& key );
 
-   WO* redCube;
-   /*Aftr::Mat4 startCamPose;
-   Aftr::Mat4 startCubePose;*/
+   NathanGUI* theGUI; // GUI
+   std::vector<std::string> course; // holds locations of objects so that they can be replaced automatically
+   std::vector<Vector> locations;
+
+   WO* redCube; // user vehicle
+   WO* startingLocation;// starting location
+   WO* startingLine; // starting line
+   WO* marker1;
+
+   WO* holder; // for rotation
+
+   bool firstCheck = false;
+
 
    bool pressW;
    bool pressA;
@@ -50,13 +62,11 @@ public:
    int rotateDown = 0;
    float speed = 0.5;
 
-   int xSign = 1;
-   int ySign = 1;
-   int zSign = 1;
 
-
-   Aftr::Vector currLD;
-   Aftr::Vector currGP;
+   // space object functions
+   void placeAsteroid(Vector location);
+   void buildCourseAsteroidGuide();
+   void placeCheckpointMarker(Vector location);
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );
