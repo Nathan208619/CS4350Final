@@ -111,6 +111,28 @@ void GLViewNewModule::updateWorld()
         //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here" << std::endl;
     }
+    if (cam->getPosition().x > -995 && cam->getPosition().x < 272 && cam->getPosition().y > -3749 && cam->getPosition().y < -3027
+        && cam->getPosition().z > 290 && cam->getPosition().z < 1009 && secondCheck == false && firstCheck == true)
+    {
+        secondCheck = true;
+        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        std::cout << "here2" << std::endl;
+    }
+    if (cam->getPosition().x > -3730 && cam->getPosition().x < -2440 && cam->getPosition().y > -3570 && cam->getPosition().y < -2846
+        && cam->getPosition().z > 273 && cam->getPosition().z < 1000 && thirdCheck == false && secondCheck == true)
+    {
+        thirdCheck = true;
+        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        std::cout << "here3" << std::endl;
+    }
+    if (cam->getPosition().x > -2262 && cam->getPosition().x < -1400 && cam->getPosition().y > -2000 && cam->getPosition().y < -1245
+        && cam->getPosition().z > 0 && cam->getPosition().z < 846 && fourthCheck == false && thirdCheck == true)
+    {
+        fourthCheck = true;
+        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        std::cout << "here4" << std::endl;
+    }
+
 
    //************ Vehicle Controls ******************
    if (pressW == true) 
@@ -119,13 +141,13 @@ void GLViewNewModule::updateWorld()
        move.x += redCube->getLookDirection().x * speed;
        move.y += redCube->getLookDirection().y * speed;
        move.z += redCube->getLookDirection().z * speed;
-       redCube->setPosition(move);
+       redCube->setPosition(move);*/
 
-       move = cam->getPosition();
+       auto move = cam->getPosition();
        move.x += redCube->getLookDirection().x * speed;
        move.y += redCube->getLookDirection().y * speed;
        move.z += redCube->getLookDirection().z * speed;
-       cam->setPosition(move);*/
+       cam->setPosition(move);
 
        /*auto curr = cam->getPosition();
        curr.x = curr.x + cam->getLookDirection().x;
@@ -134,14 +156,14 @@ void GLViewNewModule::updateWorld()
    }
    if (pressA == true)
    {
-       /*cam->rotateAboutGlobalZ(-0.05);
-       redCube->rotateAboutGlobalZ(-0.05);*/
+       cam->rotateAboutGlobalZ(-0.05);
+       redCube->rotateAboutGlobalZ(-0.25);
 
-       auto curr = cam->getPosition();
+       /*auto curr = cam->getPosition();
        auto direction = cam->getDisplayMatrix().getZ();
        auto next = direction.crossProduct(cam->getLookDirection());
        curr = curr + next;
-       cam->setPosition(curr);
+       cam->setPosition(curr);*/
    }
    if (pressS == true)
    {
@@ -152,15 +174,15 @@ void GLViewNewModule::updateWorld()
    }
    if (pressD == true)
    {
-       auto curr = cam->getPosition();
+       /*auto curr = cam->getPosition();
        auto directionZ = cam->getDisplayMatrix().getZ();
        auto nextZ = directionZ.crossProduct(cam->getLookDirection());
        curr = curr - nextZ;
-       cam->setPosition(curr);
+       cam->setPosition(curr);*/
        
 
        //redCube->rotateAboutGlobalZ(0.05);
-       //cam->rotateAboutGlobalZ(0.05);
+       cam->rotateAboutGlobalZ(0.05);
    }
    if (pressSpace == true)
    {
@@ -171,28 +193,34 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateUp < 40)
        {
-           redCube->rotateAboutRelY(-0.02);
-            rotateUp++;
+           //redCube->rotateAboutRelY(-0.02);
+           cam->rotateAboutRelY(-0.02);
+           rotateUp++;
        }
+       //redCube->rotateAboutRelY(-0.25);
    }
    else if (pressLctrl == true && pressLshift == false)
    {
        if (rotateDown < 40)
        {
-           redCube->rotateAboutRelY(0.02);
+           cam->rotateAboutRelY(0.02);
+           //redCube->rotateAboutRelY(0.02);
            rotateDown++;
        }
+       //redCube->rotateAboutRelY(0.25);
    }
    else
    {
        if (rotateUp > 0)
        {
-           redCube->rotateAboutRelY(0.02);
+           cam->rotateAboutRelY(0.02);
+           //redCube->rotateAboutRelY(0.02);
            rotateUp--;
        }
        if (rotateDown > 0)
        {
-           redCube->rotateAboutRelY(-0.02);
+           cam->rotateAboutRelY(-0.02);
+           //redCube->rotateAboutRelY(-0.02);
            rotateDown--;
        }
    }
@@ -292,7 +320,7 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        }
        outs.close();
        std::cout << "course saved" << std::endl;*/
-       cam->setPosition(Vector(770,-1100, 309));
+       cam->setPosition(Vector(-1902,-1604, 479));
        placeCheckpointMarker(cam->getPosition());
    }
 }
@@ -332,8 +360,8 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    }
    if (key.keysym.sym == SDLK_f)
    {
-       cam->setParentWorldObject(redCube);
-       cam->lockWRTparent_using_current_relative_pose();
+       redCube->setParentWorldObject(cam);
+       redCube->lockWRTparent_using_current_relative_pose();
    }
 }
 

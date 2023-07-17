@@ -47,6 +47,9 @@ public:
    WO* holder; // for rotation
 
    bool firstCheck = false;
+   bool secondCheck = false;
+   bool thirdCheck = false;
+   bool fourthCheck = false;
 
 
    bool pressW;
