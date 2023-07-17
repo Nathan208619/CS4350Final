@@ -99,6 +99,8 @@ void GLViewNewModule::updateWorld()
     //If you want to add additional functionality, do it after
     //this call.
 
+
+    // ********************* Course Checkpoints ***************************
     if (theGUI->raceStart == true)
     {
         //theGUI->elapsedTime += 0.1 (GL_TIME_ELAPSED / 2296459.2);
@@ -132,7 +134,17 @@ void GLViewNewModule::updateWorld()
         //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here4" << std::endl;
     }
+    if (cam->getPosition().x > 110 && cam->getPosition().x < 150 && cam->getPosition().y > -77 && cam->getPosition().y < 85
+        && cam->getPosition().z > -25 && cam->getPosition().z < 65 && theGUI->raceFinshed == false && fourthCheck == true)
+    {
+        fourthCheck = true;
+        theGUI->raceFinshed = true;
+        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        std::cout << "finished" << std::endl;
+    }
+    // ********************* Course Checkpoints ***************************
 
+    
 
    //************ Vehicle Controls ******************
    if (pressW == true) 
@@ -224,6 +236,8 @@ void GLViewNewModule::updateWorld()
            rotateDown--;
        }
    }
+   //************ Vehicle Controls ******************
+
 }
 
 
@@ -320,7 +334,7 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        }
        outs.close();
        std::cout << "course saved" << std::endl;*/
-       cam->setPosition(Vector(-1902,-1604, 479));
+       cam->setPosition(Vector(130, 3, 10));
        placeCheckpointMarker(cam->getPosition());
    }
 }
@@ -610,7 +624,7 @@ void Aftr::GLViewNewModule::buildCourseAsteroidGuide()
 void Aftr::GLViewNewModule::placeCheckpointMarker(Vector location)
 {
     std::string cube(ManagerEnvironmentConfiguration::getSMM() + "/models/cube4x4x4redShinyPlastic_pp.wrl");
-    WO* marker = WO::New(cube, Vector(180, 180, 180), MESH_SHADING_TYPE::mstAUTO);
+    WO* marker = WO::New(cube, Vector(10, 40, 25), MESH_SHADING_TYPE::mstAUTO);
     //WO* marker = WO::New(cube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
     auto x = cam->getLookDirection();
     auto y = cam->getPosition();

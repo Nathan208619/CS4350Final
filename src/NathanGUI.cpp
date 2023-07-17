@@ -41,6 +41,10 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Separator();
 
+	ImGui::Text("Elapsed Time: %.2f", elapsedTime);
+	
+	ImGui::Separator();
+
 	if(ImGui::Button("Change Style"))
 	{
 		if (style1 == false)
@@ -63,6 +67,7 @@ void NathanGUI::onCreate(float width, float height)
 	WOImGuiAbstract::onCreate(width, height);
 	style1 = false;
 	raceStart = false;
+	raceFinshed = false;
 	reset = false;
 
 	bobcatStyle();

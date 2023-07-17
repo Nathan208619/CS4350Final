@@ -19,8 +19,10 @@ namespace Aftr
 		void bobcatStyle();
 
 		bool raceStart;
+		bool raceFinshed;
 		bool reset;
 		float elapsedTime = 0;
+		float bestTime = 0;
 
 
 	private:
