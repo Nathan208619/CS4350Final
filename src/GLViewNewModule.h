@@ -65,7 +65,7 @@ public:
    int rotateDown = 0;
 
 
-   float speed = 0.8;
+   float speed = 2;
 
    Mat4 vehicleIPose;
    Mat4 camIPose;

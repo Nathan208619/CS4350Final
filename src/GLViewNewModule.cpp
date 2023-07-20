@@ -99,7 +99,7 @@ void GLViewNewModule::updateWorld()
     //If you want to add additional functionality, do it after
     //this call.
 
-    if (theGUI->reset = true)
+    if (theGUI->reset == true)
     {
         firstCheck = false;
         secondCheck = false;
@@ -177,11 +177,6 @@ void GLViewNewModule::updateWorld()
     if (cam->getPosition().x > 110 && cam->getPosition().x < 150 && cam->getPosition().y > -77 && cam->getPosition().y < 85
         && cam->getPosition().z > -25 && cam->getPosition().z < 65 && theGUI->raceFinshed == false && fourthCheck == true)
     {
-        firstCheck = false;
-        secondCheck = false;
-        thirdCheck = false;
-        fourthCheck = false;
-
         theGUI->raceFinshed = true;
         theGUI->onGoing = false;
         theGUI->unlockRacer = true;
@@ -203,6 +198,14 @@ void GLViewNewModule::updateWorld()
     }
     // ********************* Course Checkpoints ***************************
 
+    if (theGUI->raceFinshed == true)
+    {
+        firstCheck = false;
+        secondCheck = false;
+        thirdCheck = false;
+        fourthCheck = false;
+        theGUI->raceFinshed = false;
+    }
     
 
    //************ Vehicle Controls ******************
