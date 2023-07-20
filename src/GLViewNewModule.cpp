@@ -99,47 +99,106 @@ void GLViewNewModule::updateWorld()
     //If you want to add additional functionality, do it after
     //this call.
 
+    if (theGUI->reset = true)
+    {
+        firstCheck = false;
+        secondCheck = false;
+        thirdCheck = false;
+        fourthCheck = false;
 
-    // ********************* Course Checkpoints ***************************
+        theGUI->reset = false;
+        theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
+    }
+
+    // ********************* Lock and unlock racer ***************************
+    if (theGUI->lockRacer == true)
+    {
+        cam->setPose(camIPose);
+        redCube->setPose(vehicleIPose);
+        redCube->setParentWorldObject(cam);
+        redCube->lockWRTparent_using_current_relative_pose();
+        theGUI->lockRacer = false;
+    }
+    if (theGUI->unlockRacer == true)
+    {
+        cam->setPose(camIPose);
+        redCube->setPose(vehicleIPose);
+
+        redCube->unLockWRTparent();
+        theGUI->unlockRacer = false;
+    }
+
+
     if (theGUI->raceStart == true)
     {
-        //theGUI->elapsedTime += 0.1 (GL_TIME_ELAPSED / 2296459.2);
+        theGUI->countdown -= 0.01667;
+        theGUI->countdownText = std::to_string(theGUI->countdown);
+
+        if (theGUI->countdown <= 0)
+        {
+            theGUI->countdownText = "GO!!!";
+            theGUI->onGoing = true;
+            theGUI->raceStart = false;
+        }
+    }
+
+    // ********************* Race Timer ***************************
+    if (theGUI->onGoing == true)
+    {
         theGUI->elapsedTime += 0.01667;
     }
+
+    // ********************* Course Checkpoints ***************************
     if (cam->getPosition().x > 411 && cam->getPosition().x < 1130 && cam->getPosition().y > -1444 && cam->getPosition().y < -744
         && cam->getPosition().z > -45 && cam->getPosition().z < 700 && firstCheck == false)
     {
         firstCheck = true;
-        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here" << std::endl;
     }
     if (cam->getPosition().x > -995 && cam->getPosition().x < 272 && cam->getPosition().y > -3749 && cam->getPosition().y < -3027
         && cam->getPosition().z > 290 && cam->getPosition().z < 1009 && secondCheck == false && firstCheck == true)
     {
         secondCheck = true;
-        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here2" << std::endl;
     }
     if (cam->getPosition().x > -3730 && cam->getPosition().x < -2440 && cam->getPosition().y > -3570 && cam->getPosition().y < -2846
         && cam->getPosition().z > 273 && cam->getPosition().z < 1000 && thirdCheck == false && secondCheck == true)
     {
         thirdCheck = true;
-        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here3" << std::endl;
     }
     if (cam->getPosition().x > -2262 && cam->getPosition().x < -1400 && cam->getPosition().y > -2000 && cam->getPosition().y < -1245
         && cam->getPosition().z > 0 && cam->getPosition().z < 846 && fourthCheck == false && thirdCheck == true)
     {
         fourthCheck = true;
-        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
         std::cout << "here4" << std::endl;
     }
+    // race finishes here
     if (cam->getPosition().x > 110 && cam->getPosition().x < 150 && cam->getPosition().y > -77 && cam->getPosition().y < 85
         && cam->getPosition().z > -25 && cam->getPosition().z < 65 && theGUI->raceFinshed == false && fourthCheck == true)
     {
-        fourthCheck = true;
+        firstCheck = false;
+        secondCheck = false;
+        thirdCheck = false;
+        fourthCheck = false;
+
         theGUI->raceFinshed = true;
-        //marker1->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        theGUI->onGoing = false;
+        theGUI->unlockRacer = true;
+        theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
+        theGUI->countdown = 3;
+
+        if (theGUI->bestTime == 0)
+        {
+            theGUI->bestTime = theGUI->elapsedTime;
+        }
+
+        if (theGUI->elapsedTime < theGUI->bestTime)
+        {
+            theGUI->bestTime = theGUI->elapsedTime;
+        }
+        theGUI->elapsedTime = 0;
+        theGUI->startReset = "Start";
         std::cout << "finished" << std::endl;
     }
     // ********************* Course Checkpoints ***************************
@@ -475,7 +534,7 @@ void Aftr::GLViewNewModule::loadMap()
 
    // player vehicle
     redCube = WO::New(jet, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
-    redCube->setPosition(23, 15, 2);
+    redCube->setPosition(62, 15, 2);
     redCube->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(redCube);
 
@@ -537,7 +596,7 @@ void Aftr::GLViewNewModule::loadMap()
    createNewModuleWayPoints();
 
    // ADDITIONAL THINGS DONE BY ME
-   cam->setPosition(5, 15, 9); // setting cam starting position
+   cam->setPosition(45, 15, 8); // setting cam starting position
    buildCourseAsteroidGuide(); // place asteroids
    
    theGUI = NathanGUI::New(nullptr, 1, 1);
@@ -551,6 +610,8 @@ void Aftr::GLViewNewModule::loadMap()
    pressLshift = false;
    pressLctrl = false;
 
+   vehicleIPose = redCube->getPose();
+   camIPose = cam->getPose();
 }
 
 

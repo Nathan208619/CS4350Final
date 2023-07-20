@@ -63,8 +63,12 @@ public:
    int turn = 0;
    int rotateUp = 0;
    int rotateDown = 0;
-   float speed = 0.5;
 
+
+   float speed = 0.8;
+
+   Mat4 vehicleIPose;
+   Mat4 camIPose;
 
    // space object functions
    void placeAsteroid(Vector location);

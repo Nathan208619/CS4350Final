@@ -21,19 +21,28 @@ void NathanGUI::drawImGui_for_this_frame()
 {
 	ImGui::Begin("Racing Console");
 
-	if (ImGui::Button("Start"))
+	if (ImGui::Button(startReset.c_str()))
 	{
-		raceStart = true;
+		if (onGoing == false)
+		{
+			startReset = "Reset";
+			raceStart = true;
+			lockRacer = true;
+		}
+		else
+		{
+			startReset = "Start";
+			reset = true;
+			onGoing = false;
+			unlockRacer = true;
+			elapsedTime = 0;
+			countdown = 3;
+		}
 	}
 
-	ImGui::SameLine();
+	ImGui::Separator();
 
-	if (ImGui::Button("Reset"))
-	{
-		reset = true;
-		raceStart = false;
-		elapsedTime = 0;
-	}
+	ImGui::Text(countdownText.c_str());
 
 	ImGui::Separator();
 
@@ -41,7 +50,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Separator();
 
-	ImGui::Text("Elapsed Time: %.2f", elapsedTime);
+	ImGui::Text("Best Time: %.2f", bestTime);
 	
 	ImGui::Separator();
 
@@ -68,7 +77,16 @@ void NathanGUI::onCreate(float width, float height)
 	style1 = false;
 	raceStart = false;
 	raceFinshed = false;
+	onGoing = false;
 	reset = false;
+	lockRacer = false;
+	unlockRacer = false;
+	startReset = "Start";
+	countdownText = "GET READY!!!";
+
+	float elapsedTime = 0;
+	float bestTime = 0;
+	float countdown = 3;
 
 	bobcatStyle();
 }

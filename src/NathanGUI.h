@@ -19,10 +19,17 @@ namespace Aftr
 		void bobcatStyle();
 
 		bool raceStart;
+		bool onGoing;
 		bool raceFinshed;
 		bool reset;
+		bool lockRacer;
+		bool unlockRacer;
+
 		float elapsedTime = 0;
 		float bestTime = 0;
+		float countdown = 3;
+		std::string startReset;
+		std::string countdownText;
 
 
 	private:
