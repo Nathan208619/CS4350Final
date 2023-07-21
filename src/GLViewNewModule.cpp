@@ -114,6 +114,7 @@ void GLViewNewModule::updateWorld()
     if (theGUI->lockRacer == true)
     {
         cam->setPose(camIPose);
+        jet->setPose(vehicleIPose);
         redCube->setPose(vehicleIPose);
         redCube->setParentWorldObject(cam);
         redCube->lockWRTparent_using_current_relative_pose();
@@ -122,6 +123,7 @@ void GLViewNewModule::updateWorld()
     if (theGUI->unlockRacer == true)
     {
         cam->setPose(camIPose);
+        jet->setPose(vehicleIPose);
         redCube->setPose(vehicleIPose);
 
         redCube->unLockWRTparent();
@@ -218,20 +220,21 @@ void GLViewNewModule::updateWorld()
        redCube->setPosition(move);*/
 
        auto move = cam->getPosition();
-       move.x += redCube->getLookDirection().x * speed;
-       move.y += redCube->getLookDirection().y * speed;
-       move.z += redCube->getLookDirection().z * speed;
+       move.x += jet->getLookDirection().x * speed;
+       move.y += jet->getLookDirection().y * speed;
+       move.z += jet->getLookDirection().z * speed;
        cam->setPosition(move);
+       jet->setPosition(redCube->getPosition());
 
        /*auto curr = cam->getPosition();
        curr.x = curr.x + cam->getLookDirection().x;
        curr.y = curr.y + cam->getLookDirection().y;
        cam->setPosition(curr);*/
    }
-   if (pressA == true)
+   if (pressW && pressA == true)
    {
        cam->rotateAboutGlobalZ(-0.05);
-       redCube->rotateAboutGlobalZ(-0.25);
+       jet->rotateAboutGlobalZ(-0.05);
 
        /*auto curr = cam->getPosition();
        auto direction = cam->getDisplayMatrix().getZ();
@@ -245,8 +248,9 @@ void GLViewNewModule::updateWorld()
        curr.x = curr.x - cam->getLookDirection().x;
        curr.y = curr.y - cam->getLookDirection().y;
        cam->setPosition(curr);
+       jet->setPosition(redCube->getPosition());
    }
-   if (pressD == true)
+   if (pressW && pressD == true)
    {
        /*auto curr = cam->getPosition();
        auto directionZ = cam->getDisplayMatrix().getZ();
@@ -257,18 +261,36 @@ void GLViewNewModule::updateWorld()
 
        //redCube->rotateAboutGlobalZ(0.05);
        cam->rotateAboutGlobalZ(0.05);
+       jet->rotateAboutGlobalZ(0.05);
    }
    if (pressSpace == true)
    {
-       cam->setPosition(cam->getPosition().x, cam->getPosition().y, cam->getPosition().z + 1);
+       //cam->setPosition(cam->getPosition().x, cam->getPosition().y, cam->getPosition().z + 1);
+       if (boost > 0)
+       {
+            boost -= 0.01667;
+       }
+       else
+       {
+           pressSpace = false;
+           speed /= 2;
+       }
+   }
+   else
+   {
+       if (boost <= 5)
+       {
+            boost += 0.01667;
+       }
    }
 
    if (pressLshift == true && pressLctrl == false)
    {
        if (rotateUp < 40)
        {
+           jet->rotateAboutRelY(-0.02);
+           //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
-           cam->rotateAboutRelY(-0.02);
            rotateUp++;
        }
        //redCube->rotateAboutRelY(-0.25);
@@ -277,7 +299,8 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateDown < 40)
        {
-           cam->rotateAboutRelY(0.02);
+           jet->rotateAboutRelY(0.02);
+           //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateDown++;
        }
@@ -287,13 +310,15 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateUp > 0)
        {
-           cam->rotateAboutRelY(0.02);
+           jet->rotateAboutRelY(0.02);
+           //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateUp--;
        }
        if (rotateDown > 0)
        {
-           cam->rotateAboutRelY(-0.02);
+           jet->rotateAboutRelY(-0.02);
+           //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
            rotateDown--;
        }
@@ -351,7 +376,11 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
    }
    if (key.keysym.sym == SDLK_SPACE)
    {
-       pressSpace = true;
+       if (!pressSpace && boost >= 5)
+       {
+            pressSpace = true;
+            speed *= 2;
+       }
    }
    if (key.keysym.sym == SDLK_LSHIFT)
    {
@@ -424,7 +453,6 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    }
    if (key.keysym.sym == SDLK_SPACE)
    {
-       pressSpace = false;
    }
    if (key.keysym.sym == SDLK_LSHIFT)
    {
@@ -460,7 +488,7 @@ void Aftr::GLViewNewModule::loadMap()
    std::string wheeledCar( ManagerEnvironmentConfiguration::getSMM() + "/models/rcx_treads.wrl" );
    std::string grass( ManagerEnvironmentConfiguration::getSMM() + "/models/grassFloor400x400_pp.wrl" );
    std::string human( ManagerEnvironmentConfiguration::getSMM() + "/models/human_chest.wrl" );
-   std::string jet(ManagerEnvironmentConfiguration::getSMM() + "/models/jet_wheels_down_PP.wrl");
+   std::string jet1(ManagerEnvironmentConfiguration::getSMM() + "/models/jet_wheels_down_PP.wrl");
    std::string spaceStation(ManagerEnvironmentConfiguration::getSMM() + "/models/spaceStation220x130x160.wrl");
    std::string startingPillar(ManagerEnvironmentConfiguration::getLMM() + "/models/race_drag_start_and_finish_line.glb");
    std::string donut(ManagerEnvironmentConfiguration::getLMM() + "/models/donut.glb");
@@ -536,11 +564,17 @@ void Aftr::GLViewNewModule::loadMap()
    }
 
    // player vehicle
-    redCube = WO::New(jet, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
+    redCube = WO::New(shinyRedPlasticCube, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
     redCube->setPosition(62, 15, 2);
     redCube->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(redCube);
+    redCube->isVisible = false;
 
+    jet = WO::New(jet1, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
+    jet->setPosition(62, 15, 2);
+    jet->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(jet);
+    
     // space station
     startingLocation = WO::New(spaceStation, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
     startingLocation->setPosition(67, 175, 21);
@@ -593,6 +627,8 @@ void Aftr::GLViewNewModule::loadMap()
     tmpMarker->setPosition(1279, -1370, 456);
     worldLst->push_back(tmpMarker);
     marker1 = tmpMarker;
+
+
 
 
 

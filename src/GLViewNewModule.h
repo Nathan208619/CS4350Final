@@ -40,6 +40,7 @@ public:
    std::vector<Vector> locations;
 
    WO* redCube; // user vehicle
+   WO* jet;
    WO* startingLocation;// starting location
    WO* startingLine; // starting line
    WO* marker1;
@@ -66,6 +67,7 @@ public:
 
 
    float speed = 2;
+   float boost = 5;
 
    Mat4 vehicleIPose;
    Mat4 camIPose;
