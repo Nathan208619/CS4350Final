@@ -39,8 +39,13 @@ public:
    std::vector<std::string> course; // holds locations of objects so that they can be replaced automatically
    std::vector<Vector> locations;
 
-   WO* redCube; // user vehicle
+   // user vehicles
+   WO* redCube;
    WO* jet;
+   WO* spaceShip;
+   WO* user;
+
+
    WO* startingLocation;// starting location
    WO* startingLine; // starting line
    WO* marker1;
@@ -65,7 +70,6 @@ public:
    int rotateUp = 0;
    int rotateDown = 0;
 
-
    float speed = 2;
    float boost = 5;
 
@@ -76,6 +80,7 @@ public:
    void placeAsteroid(Vector location);
    void buildCourseAsteroidGuide();
    void placeCheckpointMarker(Vector location);
+   void setVehicle();
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );

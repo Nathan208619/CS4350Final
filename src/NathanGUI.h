@@ -31,6 +31,12 @@ namespace Aftr
 		std::string startReset;
 		std::string countdownText;
 
+		bool jet;
+		bool spaceShip;
+		bool vehicleChosen;
+		std::string currVehicle;
+
+		std::string boostValue;
 
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};

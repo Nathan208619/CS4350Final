@@ -23,7 +23,11 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (ImGui::Button(startReset.c_str()))
 	{
-		if (onGoing == false)
+		if (vehicleChosen == false)
+		{
+			currVehicle = "Must choose Vehicle to race";
+		}
+		else if (onGoing == false && vehicleChosen == true)
 		{
 			startReset = "Reset";
 			raceStart = true;
@@ -44,6 +48,13 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Text(countdownText.c_str());
 
+	if (onGoing == true)
+	{
+		ImGui::Separator();
+
+		ImGui::Text(boostValue.c_str());
+	}
+
 	ImGui::Separator();
 
 	ImGui::Text("Elapsed Time: %.2f", elapsedTime);
@@ -51,8 +62,36 @@ void NathanGUI::drawImGui_for_this_frame()
 	ImGui::Separator();
 
 	ImGui::Text("Best Time: %.2f", bestTime);
+
+	if (onGoing == false && raceStart == false)
+	{
+		ImGui::Separator();
+		
+		ImGui::Text("Choose Your Vehicle: ");
+
+		if(ImGui::Button("Jet"))
+		{
+			spaceShip = false;
+			jet = true;
+			currVehicle = "Current Vehicle: Jet";
+			vehicleChosen = true;
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("SpaceShip"))
+		{
+			jet = false;
+			spaceShip = true;
+			currVehicle = "Current Vehicle: Spaceship";
+			vehicleChosen = true;
+		}
+	}
 	
 	ImGui::Separator();
+	
+	ImGui::Text(currVehicle.c_str());
+	
+	ImGui::Separator();
+
 
 	if(ImGui::Button("Change Style"))
 	{
@@ -87,6 +126,13 @@ void NathanGUI::onCreate(float width, float height)
 	float elapsedTime = 0;
 	float bestTime = 0;
 	float countdown = 3;
+
+	jet = false;
+	spaceShip = false;
+	vehicleChosen = false;
+	currVehicle = "Current Vehicle: None";
+
+	boostValue = "Boost: MAX";
 
 	bobcatStyle();
 }

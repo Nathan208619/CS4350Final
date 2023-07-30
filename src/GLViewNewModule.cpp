@@ -99,22 +99,42 @@ void GLViewNewModule::updateWorld()
     //If you want to add additional functionality, do it after
     //this call.
 
+    //**************choose user vehicle****************
+    // jet
+    /*if (theGUI->jet == true && vehicleChosen == false)
+    {
+        user = jet;
+        redCube->setPosition(user->getPosition());
+        cam->setPosition(48.5, 0, 8);
+        vehicleChosen = true;
+    }*/
+    //spaceShip
+    /*if (theGUI->spaceShip == true && vehicleChosen == false)
+    {
+        user = spaceShip;
+        redCube->setPosition(user->getPosition());
+        cam->setPosition(45, 15, 8);
+        vehicleChosen = true;
+    }*/
+    //**************choose user vehicle****************
+    
+    // Reset game
     if (theGUI->reset == true)
     {
         firstCheck = false;
         secondCheck = false;
         thirdCheck = false;
         fourthCheck = false;
-
         theGUI->reset = false;
         theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
     }
 
     // ********************* Lock and unlock racer ***************************
-    if (theGUI->lockRacer == true)
+    if (theGUI->lockRacer == true && theGUI->vehicleChosen == true)
     {
         cam->setPose(camIPose);
-        jet->setPose(vehicleIPose);
+        setVehicle();
+        user->setPose(vehicleIPose);
         redCube->setPose(vehicleIPose);
         redCube->setParentWorldObject(cam);
         redCube->lockWRTparent_using_current_relative_pose();
@@ -123,7 +143,7 @@ void GLViewNewModule::updateWorld()
     if (theGUI->unlockRacer == true)
     {
         cam->setPose(camIPose);
-        jet->setPose(vehicleIPose);
+        user->setPose(vehicleIPose);
         redCube->setPose(vehicleIPose);
 
         redCube->unLockWRTparent();
@@ -206,10 +226,11 @@ void GLViewNewModule::updateWorld()
         secondCheck = false;
         thirdCheck = false;
         fourthCheck = false;
+        theGUI->jet = false;
+        theGUI->spaceShip = false;
         theGUI->raceFinshed = false;
     }
     
-
    //************ Vehicle Controls ******************
    if (pressW == true) 
    {
@@ -220,11 +241,11 @@ void GLViewNewModule::updateWorld()
        redCube->setPosition(move);*/
 
        auto move = cam->getPosition();
-       move.x += jet->getLookDirection().x * speed;
-       move.y += jet->getLookDirection().y * speed;
-       move.z += jet->getLookDirection().z * speed;
+       move.x += user->getLookDirection().x * speed;
+       move.y += user->getLookDirection().y * speed;
+       move.z += user->getLookDirection().z * speed;
        cam->setPosition(move);
-       jet->setPosition(redCube->getPosition());
+       user->setPosition(redCube->getPosition());
 
        /*auto curr = cam->getPosition();
        curr.x = curr.x + cam->getLookDirection().x;
@@ -234,7 +255,7 @@ void GLViewNewModule::updateWorld()
    if (pressW && pressA == true)
    {
        cam->rotateAboutGlobalZ(-0.05);
-       jet->rotateAboutGlobalZ(-0.05);
+       user->rotateAboutGlobalZ(-0.05);
 
        /*auto curr = cam->getPosition();
        auto direction = cam->getDisplayMatrix().getZ();
@@ -248,7 +269,7 @@ void GLViewNewModule::updateWorld()
        curr.x = curr.x - cam->getLookDirection().x;
        curr.y = curr.y - cam->getLookDirection().y;
        cam->setPosition(curr);
-       jet->setPosition(redCube->getPosition());
+       user->setPosition(redCube->getPosition());
    }
    if (pressW && pressD == true)
    {
@@ -261,7 +282,7 @@ void GLViewNewModule::updateWorld()
 
        //redCube->rotateAboutGlobalZ(0.05);
        cam->rotateAboutGlobalZ(0.05);
-       jet->rotateAboutGlobalZ(0.05);
+       user->rotateAboutGlobalZ(0.05);
    }
    if (pressSpace == true)
    {
@@ -288,7 +309,7 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateUp < 40)
        {
-           jet->rotateAboutRelY(-0.02);
+           user->rotateAboutRelY(-0.02);
            //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
            rotateUp++;
@@ -299,7 +320,7 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateDown < 40)
        {
-           jet->rotateAboutRelY(0.02);
+           user->rotateAboutRelY(0.02);
            //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateDown++;
@@ -310,14 +331,14 @@ void GLViewNewModule::updateWorld()
    {
        if (rotateUp > 0)
        {
-           jet->rotateAboutRelY(0.02);
+           user->rotateAboutRelY(0.02);
            //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateUp--;
        }
        if (rotateDown > 0)
        {
-           jet->rotateAboutRelY(-0.02);
+           user->rotateAboutRelY(-0.02);
            //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
            rotateDown--;
@@ -325,6 +346,11 @@ void GLViewNewModule::updateWorld()
    }
    //************ Vehicle Controls ******************
 
+   theGUI->boostValue = "Boost: " + std::to_string(boost);
+   if (boost >= 5)
+   {
+       theGUI->boostValue = "Boost: Max";
+   }
 }
 
 
@@ -490,6 +516,9 @@ void Aftr::GLViewNewModule::loadMap()
    std::string human( ManagerEnvironmentConfiguration::getSMM() + "/models/human_chest.wrl" );
    std::string jet1(ManagerEnvironmentConfiguration::getSMM() + "/models/jet_wheels_down_PP.wrl");
    std::string spaceStation(ManagerEnvironmentConfiguration::getSMM() + "/models/spaceStation220x130x160.wrl");
+   std::string spaceShip1(ManagerEnvironmentConfiguration::getSMM() + "/models/spaceShipSmall.wrl");
+
+   
    std::string startingPillar(ManagerEnvironmentConfiguration::getLMM() + "/models/race_drag_start_and_finish_line.glb");
    std::string donut(ManagerEnvironmentConfiguration::getLMM() + "/models/donut.glb");
 
@@ -565,16 +594,21 @@ void Aftr::GLViewNewModule::loadMap()
 
    // player vehicle
     redCube = WO::New(shinyRedPlasticCube, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
-    redCube->setPosition(62, 15, 2);
+    redCube->setPosition(0, 0, 0);
     redCube->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(redCube);
     redCube->isVisible = false;
 
     jet = WO::New(jet1, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
-    jet->setPosition(62, 15, 2);
+    jet->setPosition(62, 0, 2);
     jet->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(jet);
-    
+
+    spaceShip = WO::New(spaceShip1, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
+    spaceShip->setPosition(62, 15, 2);
+    spaceShip->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(spaceShip);
+
     // space station
     startingLocation = WO::New(spaceStation, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
     startingLocation->setPosition(67, 175, 21);
@@ -628,14 +662,10 @@ void Aftr::GLViewNewModule::loadMap()
     worldLst->push_back(tmpMarker);
     marker1 = tmpMarker;
 
-
-
-
-
    createNewModuleWayPoints();
 
    // ADDITIONAL THINGS DONE BY ME
-   cam->setPosition(45, 15, 8); // setting cam starting position
+   cam->setPosition(1.4, 1.8, 14.5); // setting cam starting position
    buildCourseAsteroidGuide(); // place asteroids
    
    theGUI = NathanGUI::New(nullptr, 1, 1);
@@ -649,7 +679,7 @@ void Aftr::GLViewNewModule::loadMap()
    pressLshift = false;
    pressLctrl = false;
 
-   vehicleIPose = redCube->getPose();
+   //vehicleIPose = redCube->getPose();
    camIPose = cam->getPose();
 }
 
@@ -731,4 +761,25 @@ void Aftr::GLViewNewModule::placeCheckpointMarker(Vector location)
     marker->setPosition(location);
     marker->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(marker);
+}
+
+void Aftr::GLViewNewModule::setVehicle()
+{
+    // jet
+    if (theGUI->jet == true)
+    {
+        user = jet;
+        vehicleIPose = jet->getPose();
+        redCube->setPosition(user->getPosition());
+        cam->setPosition(48.5, 0, 8);
+    }
+
+    //spaceShip
+    if (theGUI->spaceShip == true)
+    {
+        user = spaceShip;
+        vehicleIPose = spaceShip->getPose();
+        redCube->setPosition(user->getPosition());
+        cam->setPosition(45, 15, 8);
+    }
 }
