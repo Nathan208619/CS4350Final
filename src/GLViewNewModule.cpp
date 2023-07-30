@@ -98,25 +98,6 @@ void GLViewNewModule::updateWorld()
     GLView::updateWorld(); //Just call the parent's update world first.
     //If you want to add additional functionality, do it after
     //this call.
-
-    //**************choose user vehicle****************
-    // jet
-    /*if (theGUI->jet == true && vehicleChosen == false)
-    {
-        user = jet;
-        redCube->setPosition(user->getPosition());
-        cam->setPosition(48.5, 0, 8);
-        vehicleChosen = true;
-    }*/
-    //spaceShip
-    /*if (theGUI->spaceShip == true && vehicleChosen == false)
-    {
-        user = spaceShip;
-        redCube->setPosition(user->getPosition());
-        cam->setPosition(45, 15, 8);
-        vehicleChosen = true;
-    }*/
-    //**************choose user vehicle****************
     
     // Reset game
     if (theGUI->reset == true)
