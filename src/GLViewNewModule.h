@@ -3,6 +3,11 @@
 #include "GLView.h"
 #include "NathanGUI.h"
 
+#include "NetMsg.h"
+#include "NetMessengerClient.h"
+#include "NetMsgCreateWO.h"
+//#include "NathanMsg.h"
+
 
 namespace Aftr
 {
@@ -81,6 +86,9 @@ public:
    void buildCourseAsteroidGuide();
    void placeCheckpointMarker(Vector location);
    void setVehicle();
+
+   //multiplayer stuff
+   NetMessengerClient* client;
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );

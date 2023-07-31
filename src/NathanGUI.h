@@ -38,6 +38,15 @@ namespace Aftr
 
 		std::string boostValue;
 
+		bool twoPlayer;
+		bool jetTaken;
+		bool jetWin;
+		bool spaceShipTaken;
+		bool spaceShipWin;
+
+		std::string currIssue;
+
+
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};
 		//NathanGUI(WOGUI* parentWOGUI);

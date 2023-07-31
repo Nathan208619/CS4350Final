@@ -71,6 +71,11 @@ void NathanGUI::drawImGui_for_this_frame()
 
 		if(ImGui::Button("Jet"))
 		{
+			if (jetTaken == true)
+			{
+				currIssue = "Current Issue: Another player has selected the Jet, please select another vehicle";
+			}
+
 			spaceShip = false;
 			jet = true;
 			currVehicle = "Current Vehicle: Jet";
@@ -92,6 +97,9 @@ void NathanGUI::drawImGui_for_this_frame()
 	
 	ImGui::Separator();
 
+	ImGui::Text(currIssue.c_str());
+
+	ImGui::Separator();
 
 	if(ImGui::Button("Change Style"))
 	{
@@ -133,6 +141,14 @@ void NathanGUI::onCreate(float width, float height)
 	currVehicle = "Current Vehicle: None";
 
 	boostValue = "Boost: MAX";
+
+	twoPlayer = false;
+	jetTaken = false;
+	jetWin = false;
+	spaceShipTaken = false;
+	spaceShipWin = false;
+
+	currIssue = "Current Issue: None";
 
 	bobcatStyle();
 }

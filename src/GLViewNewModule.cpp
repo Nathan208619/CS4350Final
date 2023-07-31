@@ -99,6 +99,23 @@ void GLViewNewModule::updateWorld()
     //If you want to add additional functionality, do it after
     //this call.
     
+    //*****************Multiplayer Stuff********************************
+    if (theGUI->twoPlayer == true)
+    {
+        client = NetMessengerClient::New("127.0.0.1", "12685");
+    }
+
+    if (theGUI->jet == true && theGUI->jetTaken == false)
+    {
+        theGUI->jetTaken = true;
+    }
+
+    if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false)
+    {
+        theGUI->spaceShipTaken = true;
+    }
+    //*****************Multiplayer Stuff********************************
+
     // Reset game
     if (theGUI->reset == true)
     {
@@ -130,7 +147,6 @@ void GLViewNewModule::updateWorld()
         redCube->unLockWRTparent();
         theGUI->unlockRacer = false;
     }
-
 
     if (theGUI->raceStart == true)
     {
