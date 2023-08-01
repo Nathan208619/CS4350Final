@@ -51,6 +51,8 @@ namespace Aftr
 		std::string currPlayer;
 		std::string currIssue;
 
+		bool vSet;
+
 
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};

@@ -109,9 +109,9 @@ void GLViewNewModule::updateWorld()
 
     if (theGUI->secondPlayer == true && theGUI->connected == false)
     {
+        std::cout << "connection" << std::endl;
         client = NetMessengerClient::New("127.0.0.1", "12683");
         theGUI->connected = true;
-        std::cout << "connection" << std::endl;
     }
     
     /*if (theGUI->connected == true)
@@ -122,7 +122,7 @@ void GLViewNewModule::updateWorld()
 
     if (theGUI->jet == true && theGUI->jetTaken == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        theGUI->jetTaken = true;
+        //theGUI->vSet = true;
         NathanMsg msg;
         msg.jetGone = true;
         client->sendNetMsgSynchronousTCP(msg);
@@ -155,6 +155,15 @@ void GLViewNewModule::updateWorld()
         redCube->setParentWorldObject(cam);
         redCube->lockWRTparent_using_current_relative_pose();
         theGUI->lockRacer = false;
+
+        if (theGUI->firstPlayer == true || theGUI->secondPlayer == true && theGUI->vSet == false)
+        {
+            theGUI->vSet = true;
+            NathanMsg msg;
+            msg.startRace = true;
+            client->sendNetMsgSynchronousTCP(msg);
+        }
+
     }
     if (theGUI->unlockRacer == true)
     {

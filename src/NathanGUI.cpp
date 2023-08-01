@@ -27,6 +27,10 @@ void NathanGUI::drawImGui_for_this_frame()
 		{
 			currVehicle = "Must choose Vehicle to race";
 		}
+		else if (jetTaken == false && spaceShipTaken == false && (firstPlayer == true || secondPlayer == true))
+		{
+			currIssue = "Current Issue: Both player must choose vehicle to begin";
+		}
 		else if (onGoing == false && vehicleChosen == true)
 		{
 			startReset = "Reset";
@@ -179,6 +183,8 @@ void NathanGUI::onCreate(float width, float height)
 
 	currPlayer = "Your are neither Player";
 	currIssue = "Current Issue: None";
+
+	vSet = false;
 
 	bobcatStyle();
 }

@@ -25,6 +25,8 @@ namespace Aftr
 		int spaceShipGone = false;
 		int spaceShipVic = false;
 
+		int startRace = false;
+
 	protected:
 
 	};
