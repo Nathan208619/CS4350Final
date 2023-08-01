@@ -279,7 +279,7 @@ void GLViewNewModule::updateWorld()
         multiplayerReset();
     }
    //************ Vehicle Controls ******************
-   if (pressW == true) 
+   if (pressW == true && theGUI->onGoing == true) 
    {
        auto move = cam->getPosition();
        move.x += user->getLookDirection().x * speed;
@@ -298,7 +298,7 @@ void GLViewNewModule::updateWorld()
            client->sendNetMsgSynchronousTCP(msg);
        }
    }
-   if (pressA == true)
+   if (pressA == true && theGUI->onGoing == true)
    {
        cam->rotateAboutGlobalZ(-0.05);
        user->rotateAboutGlobalZ(-0.05);
@@ -310,7 +310,7 @@ void GLViewNewModule::updateWorld()
            client->sendNetMsgSynchronousTCP(msg);
        }
    }
-   if (pressS == true)
+   if (pressS == true && theGUI->onGoing == true)
    {
        auto move = cam->getPosition();
        move.x -= user->getLookDirection().x * speed;
@@ -329,7 +329,7 @@ void GLViewNewModule::updateWorld()
            client->sendNetMsgSynchronousTCP(msg);
        }
    }
-   if (pressD == true)
+   if (pressD == true && theGUI->onGoing == true)
    {
        cam->rotateAboutGlobalZ(0.05);
        user->rotateAboutGlobalZ(0.05);
@@ -341,7 +341,7 @@ void GLViewNewModule::updateWorld()
            client->sendNetMsgSynchronousTCP(msg);
        }
    }
-   if (pressSpace == true)
+   if (pressSpace == true && theGUI->onGoing == true)
    {
        //cam->setPosition(cam->getPosition().x, cam->getPosition().y, cam->getPosition().z + 1);
        if (boost > 0)
@@ -362,7 +362,7 @@ void GLViewNewModule::updateWorld()
        }
    }
 
-   if (pressLshift == true && pressLctrl == false)
+   if (pressLshift == true && pressLctrl == false && theGUI->onGoing == true)
    {
        if (rotateUp < 40)
        {
@@ -380,7 +380,7 @@ void GLViewNewModule::updateWorld()
        }
        //redCube->rotateAboutRelY(-0.25);
    }
-   else if (pressLctrl == true && pressLshift == false)
+   else if (pressLctrl == true && pressLshift == false && theGUI->onGoing == true)
    {
        if (rotateDown < 40)
        {
