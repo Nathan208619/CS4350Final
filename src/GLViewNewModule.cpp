@@ -100,20 +100,38 @@ void GLViewNewModule::updateWorld()
     //this call.
     
     //*****************Multiplayer Stuff********************************
-    if (theGUI->twoPlayer == true)
+    if (theGUI->firstPlayer == true && theGUI->connected == false)
     {
+        std::cout << "connection" << std::endl;
         client = NetMessengerClient::New("127.0.0.1", "12685");
+        theGUI->connected = true;
     }
 
-    if (theGUI->jet == true && theGUI->jetTaken == false)
+    if (theGUI->secondPlayer == true && theGUI->connected == false)
+    {
+        client = NetMessengerClient::New("127.0.0.1", "12683");
+        theGUI->connected = true;
+        std::cout << "connection" << std::endl;
+    }
+    
+    /*if (theGUI->connected == true)
+    {
+        NathanMsg msg;
+        client->sendNetMsgSynchronousTCP(msg);
+    }*/
+
+    if (theGUI->jet == true && theGUI->jetTaken == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
         theGUI->jetTaken = true;
+        NathanMsg msg;
+        msg.jetGone = true;
+        client->sendNetMsgSynchronousTCP(msg);
     }
 
-    if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false)
+   /* if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false)
     {
         theGUI->spaceShipTaken = true;
-    }
+    }*/
     //*****************Multiplayer Stuff********************************
 
     // Reset game

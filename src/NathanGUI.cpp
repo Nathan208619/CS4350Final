@@ -75,11 +75,13 @@ void NathanGUI::drawImGui_for_this_frame()
 			{
 				currIssue = "Current Issue: Another player has selected the Jet, please select another vehicle";
 			}
-
-			spaceShip = false;
-			jet = true;
-			currVehicle = "Current Vehicle: Jet";
-			vehicleChosen = true;
+			else
+			{
+				spaceShip = false;
+				jet = true;
+				currVehicle = "Current Vehicle: Jet";
+				vehicleChosen = true;
+			}
 		}
 		ImGui::SameLine();
 		if(ImGui::Button("SpaceShip"))
@@ -97,9 +99,28 @@ void NathanGUI::drawImGui_for_this_frame()
 	
 	ImGui::Separator();
 
-	ImGui::Text(currIssue.c_str());
+	ImGui::Text(currPlayer.c_str());
 
 	ImGui::Separator();
+
+	if (firstPlayer == false && secondPlayer == false)
+	{
+		if (ImGui::Button("First Player"))
+		{
+			firstPlayer = true;
+			currPlayer = "Your are First Player";
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("second Player"))
+		{
+			secondPlayer = true;
+			currPlayer = "Your are Second Player";
+		}
+
+		ImGui::Separator();
+	}
 
 	if(ImGui::Button("Change Style"))
 	{
@@ -114,6 +135,10 @@ void NathanGUI::drawImGui_for_this_frame()
 			style1 = false;
 		}
 	}
+
+	ImGui::Separator();
+
+	ImGui::Text(currIssue.c_str());
 
 	ImGui::End();
 }
@@ -143,11 +168,16 @@ void NathanGUI::onCreate(float width, float height)
 	boostValue = "Boost: MAX";
 
 	twoPlayer = false;
+	connected = false;
+	firstPlayer = false;
+	secondPlayer = false;
+
 	jetTaken = false;
 	jetWin = false;
 	spaceShipTaken = false;
 	spaceShipWin = false;
 
+	currPlayer = "Your are neither Player";
 	currIssue = "Current Issue: None";
 
 	bobcatStyle();

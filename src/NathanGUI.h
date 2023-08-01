@@ -39,11 +39,16 @@ namespace Aftr
 		std::string boostValue;
 
 		bool twoPlayer;
+		bool connected;
+		bool firstPlayer;
+		bool secondPlayer;
+
 		bool jetTaken;
 		bool jetWin;
 		bool spaceShipTaken;
 		bool spaceShipWin;
 
+		std::string currPlayer;
 		std::string currIssue;
 
 

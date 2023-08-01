@@ -6,7 +6,7 @@
 #include "NetMsg.h"
 #include "NetMessengerClient.h"
 #include "NetMsgCreateWO.h"
-//#include "NathanMsg.h"
+#include "NathanMsg.h"
 
 
 namespace Aftr
