@@ -120,17 +120,17 @@ void GLViewNewModule::updateWorld()
         client->sendNetMsgSynchronousTCP(msg);
     }*/
 
-    if (theGUI->jet == true && theGUI->jetTaken == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
+    if (theGUI->jet == true && theGUI->jetTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        //theGUI->vSet = true;
+        theGUI->vehicleSet == true;
         NathanMsg msg;
         msg.jetGone = true;
         client->sendNetMsgSynchronousTCP(msg);
     }
 
-    if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
+    if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        //theGUI->vSet = true;
+        theGUI->vehicleSet == true;
         NathanMsg msg;
         msg.spaceShipGone = true;
         client->sendNetMsgSynchronousTCP(msg);
@@ -146,6 +146,15 @@ void GLViewNewModule::updateWorld()
         fourthCheck = false;
         theGUI->reset = false;
         theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
+
+        if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+        {
+            theGUI->vSet = false;
+            NathanMsg msg;
+            msg.resetBoth = true;
+            client->sendNetMsgSynchronousTCP(msg);
+        }
+
     }
 
     // ********************* Lock and unlock racer ***************************

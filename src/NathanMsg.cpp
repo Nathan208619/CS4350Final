@@ -24,6 +24,7 @@ NathanMsg::NathanMsg()
 	this->spaceShipGone = false;
 	this->spaceShipVic = false;
 	this->startRace = false;
+	this->resetBoth = false;
 
 }
 
@@ -39,6 +40,7 @@ bool NathanMsg::toStream(NetMessengerStreamBuffer& os) const
 	os << this->spaceShipGone;
 	os << this->spaceShipVic;
 	os << this->startRace;
+	os << this->resetBoth;
 	return true;
 }
 
@@ -50,6 +52,7 @@ bool NathanMsg::fromStream(NetMessengerStreamBuffer& is)
 	is >> this->spaceShipGone;
 	is >> this->spaceShipVic;
 	is >> this->startRace;
+	is >> this->resetBoth;
 	return true;
 }
 
@@ -70,6 +73,16 @@ void NathanMsg::onMessageArrived()
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->raceStart = true;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->lockRacer = true;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->vSet = true;
+	}
+	if (resetBoth == true)
+	{
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->reset = true;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->onGoing = false;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->unlockRacer = true;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->elapsedTime = 0;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->countdown = 3;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->vSet = false;
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->startReset = "Start";
 	}
 	std::cout << "Message Recieved" << std::endl;
 }

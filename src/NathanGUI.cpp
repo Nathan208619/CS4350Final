@@ -193,6 +193,7 @@ void NathanGUI::onCreate(float width, float height)
 	currIssue = "Current Issue: None";
 
 	vSet = false;
+	vehicleSet = false;
 
 	bobcatStyle();
 }
