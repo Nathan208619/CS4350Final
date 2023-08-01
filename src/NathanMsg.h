@@ -30,6 +30,7 @@ namespace Aftr
 
 		//vehicle vars
 		int otherVehicle = false;
+		int otherVehicleRot = false;
 
 		float xPos = 0;
 		float yPos = 0;
@@ -38,6 +39,9 @@ namespace Aftr
 		float yRot = 0;
 		float zRot = 0;
 
+		//winner
+		int victory = false;
+		float bestTime = 0;
 		
 
 	protected:

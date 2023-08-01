@@ -183,6 +183,10 @@ void GLViewNewModule::updateWorld()
         user->setPose(vehicleIPose);
         redCube->setPose(vehicleIPose);
 
+        //could cause issues
+        jet->setPose(jetPose);
+        spaceShip->setPose(spaceShipPose);
+
         redCube->unLockWRTparent();
         theGUI->unlockRacer = false;
     }
@@ -253,6 +257,14 @@ void GLViewNewModule::updateWorld()
         theGUI->elapsedTime = 0;
         theGUI->startReset = "Start";
         std::cout << "finished" << std::endl;
+
+        if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+        {
+            NathanMsg msg;
+            msg.victory = true;
+            msg.bestTime = theGUI->bestTime;
+            client->sendNetMsgSynchronousTCP(msg);
+        }
     }
     // ********************* Course Checkpoints ***************************
 
@@ -265,6 +277,7 @@ void GLViewNewModule::updateWorld()
         theGUI->jet = false;
         theGUI->spaceShip = false;
         theGUI->raceFinshed = false;
+        //unlock();
     }
     
    //************ Vehicle Controls ******************
@@ -287,37 +300,54 @@ void GLViewNewModule::updateWorld()
            client->sendNetMsgSynchronousTCP(msg);
        }
    }
-   if (pressW && pressA == true)
+   if (pressA == true)
    {
        cam->rotateAboutGlobalZ(-0.05);
        user->rotateAboutGlobalZ(-0.05);
-
-       /*auto curr = cam->getPosition();
-       auto direction = cam->getDisplayMatrix().getZ();
-       auto next = direction.crossProduct(cam->getLookDirection());
-       curr = curr + next;
-       cam->setPosition(curr);*/
+       if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+       {
+           NathanMsg msg;
+           msg.otherVehicleRot = true;
+           msg.zRot = -0.05;
+           client->sendNetMsgSynchronousTCP(msg);
+       }
    }
    if (pressS == true)
    {
-       auto curr = cam->getPosition();
+       /*auto curr = cam->getPosition();
        curr.x = curr.x - cam->getLookDirection().x;
        curr.y = curr.y - cam->getLookDirection().y;
        cam->setPosition(curr);
-       user->setPosition(redCube->getPosition());
-   }
-   if (pressW && pressD == true)
-   {
-       /*auto curr = cam->getPosition();
-       auto directionZ = cam->getDisplayMatrix().getZ();
-       auto nextZ = directionZ.crossProduct(cam->getLookDirection());
-       curr = curr - nextZ;
-       cam->setPosition(curr);*/
-       
+       user->setPosition(redCube->getPosition());*/
 
-       //redCube->rotateAboutGlobalZ(0.05);
+       auto move = cam->getPosition();
+       move.x -= user->getLookDirection().x * speed;
+       move.y -= user->getLookDirection().y * speed;
+       //move.z -= user->getLookDirection().z * speed;
+       cam->setPosition(move);
+       user->setPosition(redCube->getPosition());
+
+       if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+       {
+           NathanMsg msg;
+           msg.otherVehicle = true;
+           msg.xPos = move.x;
+           msg.yPos = move.y;
+           msg.zPos = move.z;
+           client->sendNetMsgSynchronousTCP(msg);
+       }
+   }
+   if (pressD == true)
+   {
        cam->rotateAboutGlobalZ(0.05);
        user->rotateAboutGlobalZ(0.05);
+       if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+       {
+           NathanMsg msg;
+           msg.otherVehicleRot = true;
+           msg.zRot = 0.05;
+           client->sendNetMsgSynchronousTCP(msg);
+       }
    }
    if (pressSpace == true)
    {
@@ -716,6 +746,8 @@ void Aftr::GLViewNewModule::loadMap()
 
    //vehicleIPose = redCube->getPose();
    camIPose = cam->getPose();
+   jetPose = jet->getPose();
+   spaceShipPose = spaceShip->getPose();
 }
 
 
@@ -986,7 +1018,6 @@ void Aftr::GLViewNewModule::setVehicle()
         redCube->setPosition(user->getPosition());
         cam->setPosition(48.5, 0, 8);
     }
-
     //spaceShip
     if (theGUI->spaceShip == true)
     {
@@ -995,4 +1026,15 @@ void Aftr::GLViewNewModule::setVehicle()
         redCube->setPosition(user->getPosition());
         cam->setPosition(45, 15, 8);
     }
+}
+
+void Aftr::GLViewNewModule::unlock()
+{
+    firstCheck = false;
+    secondCheck = false;
+    thirdCheck = false;
+    fourthCheck = false;
+    theGUI->jet = false;
+    theGUI->spaceShip = false;
+    theGUI->raceFinshed = false;
 }

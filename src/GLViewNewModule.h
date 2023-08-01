@@ -81,11 +81,17 @@ public:
    Mat4 vehicleIPose;
    Mat4 camIPose;
 
+   Mat4 jetPose;
+   Mat4 spaceShipPose;
+
+
    // space object functions
    void placeAsteroid(Vector location);
    void buildCourseAsteroidGuide();
    void placeCheckpointMarker(Vector location);
    void setVehicle();
+   void unlock();
+
 
    //multiplayer stuff
    NetMessengerClient* client;
