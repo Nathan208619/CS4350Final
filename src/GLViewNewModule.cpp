@@ -270,12 +270,6 @@ void GLViewNewModule::updateWorld()
    //************ Vehicle Controls ******************
    if (pressW == true) 
    {
-       /*auto move = redCube->getPosition();
-       move.x += redCube->getLookDirection().x * speed;
-       move.y += redCube->getLookDirection().y * speed;
-       move.z += redCube->getLookDirection().z * speed;
-       redCube->setPosition(move);*/
-
        auto move = cam->getPosition();
        move.x += user->getLookDirection().x * speed;
        move.y += user->getLookDirection().y * speed;
@@ -283,10 +277,15 @@ void GLViewNewModule::updateWorld()
        cam->setPosition(move);
        user->setPosition(redCube->getPosition());
 
-       /*auto curr = cam->getPosition();
-       curr.x = curr.x + cam->getLookDirection().x;
-       curr.y = curr.y + cam->getLookDirection().y;
-       cam->setPosition(curr);*/
+       if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+       {
+           NathanMsg msg;
+           msg.otherVehicle = true;
+           msg.xPos = move.x;
+           msg.yPos = move.y;
+           msg.zPos = move.z;
+           client->sendNetMsgSynchronousTCP(msg);
+       }
    }
    if (pressW && pressA == true)
    {

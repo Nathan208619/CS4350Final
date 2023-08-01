@@ -28,6 +28,18 @@ namespace Aftr
 		int startRace = false;
 		int resetBoth = false;
 
+		//vehicle vars
+		int otherVehicle = false;
+
+		float xPos = 0;
+		float yPos = 0;
+		float zPos = 0;
+
+		float yRot = 0;
+		float zRot = 0;
+
+		
+
 	protected:
 
 	};
