@@ -25,7 +25,7 @@ void NathanGUI::drawImGui_for_this_frame()
 	{
 		if (vehicleChosen == false)
 		{
-			currVehicle = "Must choose Vehicle to race";
+			currIssue = "Current Issue: Must choose Vehicle to race";
 		}
 		else if (jetTaken == false && spaceShipTaken == false && (firstPlayer == true || secondPlayer == true))
 		{
@@ -45,6 +45,7 @@ void NathanGUI::drawImGui_for_this_frame()
 			unlockRacer = true;
 			elapsedTime = 0;
 			countdown = 3;
+			meReset = true;
 		}
 	}
 
@@ -84,6 +85,7 @@ void NathanGUI::drawImGui_for_this_frame()
 				spaceShip = false;
 				jet = true;
 				currVehicle = "Current Vehicle: Jet";
+				currIssue = currIssue = "Current Issue: None";
 				vehicleChosen = true;
 			}
 		}
@@ -100,6 +102,7 @@ void NathanGUI::drawImGui_for_this_frame()
 				jet = false;
 				spaceShip = true;
 				currVehicle = "Current Vehicle: Spaceship";
+				currIssue = currIssue = "Current Issue: None";
 				vehicleChosen = true;
 			}
 		}
@@ -108,10 +111,6 @@ void NathanGUI::drawImGui_for_this_frame()
 	ImGui::Separator();
 	
 	ImGui::Text(currVehicle.c_str());
-	
-	ImGui::Separator();
-
-	ImGui::Text(currPlayer.c_str());
 
 	ImGui::Separator();
 
@@ -194,6 +193,7 @@ void NathanGUI::onCreate(float width, float height)
 
 	vSet = false;
 	vehicleSet = false;
+	meReset = false;
 
 	bobcatStyle();
 }

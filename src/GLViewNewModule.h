@@ -91,7 +91,7 @@ public:
    void placeCheckpointMarker(Vector location);
    void setVehicle();
    void unlock();
-
+   void multiplayerReset();
 
    //multiplayer stuff
    NetMessengerClient* client;

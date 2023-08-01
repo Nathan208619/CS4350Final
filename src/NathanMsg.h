@@ -26,6 +26,7 @@ namespace Aftr
 		int spaceShipVic = false;
 
 		int startRace = false;
+
 		int resetBoth = false;
 
 		//vehicle vars

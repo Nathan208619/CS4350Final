@@ -53,6 +53,7 @@ namespace Aftr
 
 		bool vehicleSet;
 		bool vSet;
+		bool meReset;
 
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};

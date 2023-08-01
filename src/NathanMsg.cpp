@@ -107,7 +107,6 @@ void NathanMsg::onMessageArrived()
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->unlockRacer = true;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->elapsedTime = 0;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->countdown = 3;
-		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->vSet = false;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->startReset = "Start";
 	}
 	if (otherVehicle == true)

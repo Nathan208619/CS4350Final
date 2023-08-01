@@ -113,16 +113,10 @@ void GLViewNewModule::updateWorld()
         client = NetMessengerClient::New("127.0.0.1", "12683");
         theGUI->connected = true;
     }
-    
-    /*if (theGUI->connected == true)
-    {
-        NathanMsg msg;
-        client->sendNetMsgSynchronousTCP(msg);
-    }*/
 
     if (theGUI->jet == true && theGUI->jetTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        theGUI->vehicleSet == true;
+        theGUI->vehicleSet = true;
         NathanMsg msg;
         msg.jetGone = true;
         client->sendNetMsgSynchronousTCP(msg);
@@ -130,13 +124,13 @@ void GLViewNewModule::updateWorld()
 
     if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        theGUI->vehicleSet == true;
-        NathanMsg msg;
+        theGUI->vehicleSet = true;
+        NathanMsg msg; 
         msg.spaceShipGone = true;
         client->sendNetMsgSynchronousTCP(msg);
     }
-    //*****************Multiplayer Stuff********************************
-
+    //*****************Multiplayer Stuff******************************** 
+ 
     // Reset game
     if (theGUI->reset == true)
     {
@@ -145,16 +139,21 @@ void GLViewNewModule::updateWorld()
         thirdCheck = false;
         fourthCheck = false;
         theGUI->reset = false;
+        theGUI->spaceShip = false;
+        theGUI->jet = false;
+        theGUI->vehicleChosen = false;
+        theGUI->currVehicle = "Current Vehicle: None";
         theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
+        //unlock();
+        multiplayerReset();
 
-        if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+        if (theGUI->meReset == true && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
         {
-            theGUI->vSet = false;
             NathanMsg msg;
             msg.resetBoth = true;
             client->sendNetMsgSynchronousTCP(msg);
+            theGUI->meReset = false;
         }
-
     }
 
     // ********************* Lock and unlock racer ***************************
@@ -168,14 +167,13 @@ void GLViewNewModule::updateWorld()
         redCube->lockWRTparent_using_current_relative_pose();
         theGUI->lockRacer = false;
 
-        if (theGUI->firstPlayer == true || theGUI->secondPlayer == true && theGUI->vSet == false)
+        if ((theGUI->firstPlayer == true || theGUI->secondPlayer == true) && theGUI->vSet == false)
         {
             theGUI->vSet = true;
             NathanMsg msg;
             msg.startRace = true;
             client->sendNetMsgSynchronousTCP(msg);
         }
-
     }
     if (theGUI->unlockRacer == true)
     {
@@ -203,13 +201,11 @@ void GLViewNewModule::updateWorld()
             theGUI->raceStart = false;
         }
     }
-
     // ********************* Race Timer ***************************
     if (theGUI->onGoing == true)
     {
         theGUI->elapsedTime += 0.01667;
     }
-
     // ********************* Course Checkpoints ***************************
     if (cam->getPosition().x > 411 && cam->getPosition().x < 1130 && cam->getPosition().y > -1444 && cam->getPosition().y < -744
         && cam->getPosition().z > -45 && cam->getPosition().z < 700 && firstCheck == false)
@@ -239,7 +235,7 @@ void GLViewNewModule::updateWorld()
     if (cam->getPosition().x > 110 && cam->getPosition().x < 150 && cam->getPosition().y > -77 && cam->getPosition().y < 85
         && cam->getPosition().z > -25 && cam->getPosition().z < 65 && theGUI->raceFinshed == false && fourthCheck == true)
     {
-        theGUI->raceFinshed = true;
+        theGUI->raceFinshed = true; 
         theGUI->onGoing = false;
         theGUI->unlockRacer = true;
         theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
@@ -267,19 +263,20 @@ void GLViewNewModule::updateWorld()
         }
     }
     // ********************* Course Checkpoints ***************************
-
     if (theGUI->raceFinshed == true)
     {
         firstCheck = false;
         secondCheck = false;
         thirdCheck = false;
         fourthCheck = false;
+        theGUI->raceFinshed = false;
         theGUI->jet = false;
         theGUI->spaceShip = false;
-        theGUI->raceFinshed = false;
+        theGUI->vehicleChosen = false;
+        theGUI->currVehicle = "Current Vehicle: None";
         //unlock();
+        multiplayerReset();
     }
-    
    //************ Vehicle Controls ******************
    if (pressW == true) 
    {
@@ -1036,5 +1033,15 @@ void Aftr::GLViewNewModule::unlock()
     fourthCheck = false;
     theGUI->jet = false;
     theGUI->spaceShip = false;
+
     theGUI->raceFinshed = false;
+    theGUI->reset = false;
+}
+
+void Aftr::GLViewNewModule::multiplayerReset()
+{
+    theGUI->jetTaken = false;
+    theGUI->spaceShipTaken = false;
+    theGUI->vSet = false;
+    theGUI->vehicleSet = false;
 }
