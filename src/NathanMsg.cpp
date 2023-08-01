@@ -27,6 +27,7 @@ NathanMsg::NathanMsg()
 	this->resetBoth = false;
 	this->otherVehicle = false;
 	this->otherVehicleRot = false;
+	this->otherVehicleRotY = false;
 	this->victory = false;
 	this->bestTime = 0;
 	this->xPos = 0;
@@ -51,6 +52,7 @@ bool NathanMsg::toStream(NetMessengerStreamBuffer& os) const
 	os << this->resetBoth;
 	os << this->otherVehicle;
 	os << this->otherVehicleRot;
+	os << this->otherVehicleRotY;
 	os << this->victory;
 	os << this->bestTime;
 	os << this->xPos;
@@ -72,6 +74,7 @@ bool NathanMsg::fromStream(NetMessengerStreamBuffer& is)
 	is >> this->resetBoth;
 	is >> this->otherVehicle;
 	is >> this->otherVehicleRot;
+	is >> this->otherVehicleRotY;
 	is >> this->victory;
 	is >> this->bestTime;
 	is >> this->xPos;
@@ -131,6 +134,17 @@ void NathanMsg::onMessageArrived()
 			ManagerGLView::getGLViewT<GLViewNewModule>()->spaceShip->rotateAboutGlobalZ(zRot);
 		}
 	}
+	if (otherVehicleRotY == true)
+	{
+		if (ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->spaceShip == true)
+		{
+			ManagerGLView::getGLViewT<GLViewNewModule>()->jet->rotateAboutRelY(yRot);
+		}
+		else
+		{
+			ManagerGLView::getGLViewT<GLViewNewModule>()->spaceShip->rotateAboutRelY(yRot);
+		}
+	}
 	if (victory == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->raceFinshed = true;
@@ -142,6 +156,14 @@ void NathanMsg::onMessageArrived()
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->bestTime = bestTime;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->elapsedTime = 0;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->startReset = "Start";
+		if (ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->firstPlayer == true)
+		{
+			ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->winner = "Winner: PLAYER TWO!!!";
+		}
+		else
+		{
+			ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->winner = "Winner: PLAYER ONE!!!";
+		}
 	}
 	std::cout << "Message Recieved" << std::endl;
 }

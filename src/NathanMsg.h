@@ -32,6 +32,7 @@ namespace Aftr
 		//vehicle vars
 		int otherVehicle = false;
 		int otherVehicleRot = false;
+		int otherVehicleRotY = false;
 
 		float xPos = 0;
 		float yPos = 0;

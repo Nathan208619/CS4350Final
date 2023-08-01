@@ -144,6 +144,7 @@ void GLViewNewModule::updateWorld()
         theGUI->vehicleChosen = false;
         theGUI->currVehicle = "Current Vehicle: None";
         theGUI->countdownText = "GET READY FOR THE NEXT RACE!!!";
+        theGUI->winner = "Winner: -----";
         //unlock();
         multiplayerReset();
 
@@ -252,7 +253,7 @@ void GLViewNewModule::updateWorld()
         }
         theGUI->elapsedTime = 0;
         theGUI->startReset = "Start";
-        std::cout << "finished" << std::endl;
+        theGUI->winner = "Winner: YOU!!!";
 
         if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
         {
@@ -311,12 +312,6 @@ void GLViewNewModule::updateWorld()
    }
    if (pressS == true)
    {
-       /*auto curr = cam->getPosition();
-       curr.x = curr.x - cam->getLookDirection().x;
-       curr.y = curr.y - cam->getLookDirection().y;
-       cam->setPosition(curr);
-       user->setPosition(redCube->getPosition());*/
-
        auto move = cam->getPosition();
        move.x -= user->getLookDirection().x * speed;
        move.y -= user->getLookDirection().y * speed;
@@ -372,6 +367,13 @@ void GLViewNewModule::updateWorld()
        if (rotateUp < 40)
        {
            user->rotateAboutRelY(-0.02);
+           if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+           {
+               NathanMsg msg;
+               msg.otherVehicleRotY = true;
+               msg.yRot = -0.02;
+               client->sendNetMsgSynchronousTCP(msg);
+           }
            //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
            rotateUp++;
@@ -386,6 +388,13 @@ void GLViewNewModule::updateWorld()
            //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateDown++;
+           if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+           {
+               NathanMsg msg;
+               msg.otherVehicleRotY = true;
+               msg.yRot = 0.02;
+               client->sendNetMsgSynchronousTCP(msg);
+           }
        }
        //redCube->rotateAboutRelY(0.25);
    }
@@ -394,6 +403,13 @@ void GLViewNewModule::updateWorld()
        if (rotateUp > 0)
        {
            user->rotateAboutRelY(0.02);
+           if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+           {
+               NathanMsg msg;
+               msg.otherVehicleRotY = true;
+               msg.yRot = 0.02;
+               client->sendNetMsgSynchronousTCP(msg);
+           }
            //cam->rotateAboutRelY(0.02);
            //redCube->rotateAboutRelY(0.02);
            rotateUp--;
@@ -401,6 +417,13 @@ void GLViewNewModule::updateWorld()
        if (rotateDown > 0)
        {
            user->rotateAboutRelY(-0.02);
+           if (theGUI->firstPlayer == true || theGUI->secondPlayer == true)
+           {
+               NathanMsg msg;
+               msg.otherVehicleRotY = true;
+               msg.yRot = -0.02;
+               client->sendNetMsgSynchronousTCP(msg);
+           }
            //cam->rotateAboutRelY(-0.02);
            //redCube->rotateAboutRelY(-0.02);
            rotateDown--;

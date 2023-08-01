@@ -55,6 +55,8 @@ namespace Aftr
 		bool vSet;
 		bool meReset;
 
+		std::string winner;
+
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};
 		//NathanGUI(WOGUI* parentWOGUI);

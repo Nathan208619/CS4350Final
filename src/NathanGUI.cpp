@@ -21,6 +21,10 @@ void NathanGUI::drawImGui_for_this_frame()
 {
 	ImGui::Begin("Racing Console");
 
+	ImGui::Text(winner.c_str());
+
+	ImGui::Separator();
+
 	if (ImGui::Button(startReset.c_str()))
 	{
 		if (vehicleChosen == false)
@@ -133,6 +137,10 @@ void NathanGUI::drawImGui_for_this_frame()
 		ImGui::Separator();
 	}
 
+	ImGui::Text(currIssue.c_str());
+
+	ImGui::Separator();
+
 	if(ImGui::Button("Change Style"))
 	{
 		if (style1 == false)
@@ -146,10 +154,6 @@ void NathanGUI::drawImGui_for_this_frame()
 			style1 = false;
 		}
 	}
-
-	ImGui::Separator();
-
-	ImGui::Text(currIssue.c_str());
 
 	ImGui::End();
 }
@@ -194,6 +198,8 @@ void NathanGUI::onCreate(float width, float height)
 	vSet = false;
 	vehicleSet = false;
 	meReset = false;
+
+	winner = "Winner: -----";
 
 	bobcatStyle();
 }
