@@ -90,10 +90,18 @@ void NathanGUI::drawImGui_for_this_frame()
 		ImGui::SameLine();
 		if(ImGui::Button("SpaceShip"))
 		{
-			jet = false;
-			spaceShip = true;
-			currVehicle = "Current Vehicle: Spaceship";
-			vehicleChosen = true;
+			if (spaceShipTaken == true)
+			{
+				currIssue = "Current Issue: Another player has selected the Spaceship, please select another vehicle";
+
+			}
+			else
+			{
+				jet = false;
+				spaceShip = true;
+				currVehicle = "Current Vehicle: Spaceship";
+				vehicleChosen = true;
+			}
 		}
 	}
 	

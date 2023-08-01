@@ -128,10 +128,13 @@ void GLViewNewModule::updateWorld()
         client->sendNetMsgSynchronousTCP(msg);
     }
 
-   /* if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false)
+    if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
     {
-        theGUI->spaceShipTaken = true;
-    }*/
+        //theGUI->vSet = true;
+        NathanMsg msg;
+        msg.spaceShipGone = true;
+        client->sendNetMsgSynchronousTCP(msg);
+    }
     //*****************Multiplayer Stuff********************************
 
     // Reset game

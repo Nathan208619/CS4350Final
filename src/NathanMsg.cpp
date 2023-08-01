@@ -60,6 +60,10 @@ void NathanMsg::onMessageArrived()
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->jetTaken = true;
 	}
+	if (spaceShipGone == true)
+	{
+		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->spaceShipTaken = true;
+	}
 	if (startRace == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->startReset = "Reset";
