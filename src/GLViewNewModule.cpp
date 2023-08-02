@@ -617,6 +617,7 @@ void Aftr::GLViewNewModule::loadMap()
    std::string moon(ManagerEnvironmentConfiguration::getLMM() + "/models/moon.fbx");
    std::string gate(ManagerEnvironmentConfiguration::getLMM() + "/models/Gate/gate.3ds");
    std::string satelite(ManagerEnvironmentConfiguration::getLMM() + "/models/Spacemodels/Satellite/satellite.3ds");
+   std::string station(ManagerEnvironmentConfiguration::getLMM() + "/models/strawberry/strawberry.3ds");
 
    //SkyBox Textures readily available
    std::vector< std::string > skyBoxImageNames; //vector to store texture paths
@@ -659,7 +660,7 @@ void Aftr::GLViewNewModule::loadMap()
       light->setLabel( "Light" );
       worldLst->push_back( light );
    }
-
+    
    {
       //Create the SkyBox
       WO* wo = WOSkyBox::New( skyBoxImageNames.at( 0 ), this->getCameraPtrPtr() );
@@ -784,6 +785,11 @@ void Aftr::GLViewNewModule::loadMap()
     //checkpointProp3->rotateAboutGlobalZ(5);
     worldLst->push_back(checkpointProp3);
 
+    WO* checkpointProp4 = WO::New(station, Vector(3, 3, 3), MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp4->setPosition(-995, -521, 679);
+    checkpointProp4->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(checkpointProp4);
+    checkpointProp4->rotateAboutGlobalX(1);
 
    createNewModuleWayPoints();
 
