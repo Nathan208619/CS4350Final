@@ -616,6 +616,7 @@ void Aftr::GLViewNewModule::loadMap()
    std::string earth(ManagerEnvironmentConfiguration::getLMM() + "/models/Spacemodels/Planet Earth/planet_earth.3ds");
    std::string moon(ManagerEnvironmentConfiguration::getLMM() + "/models/moon.fbx");
    std::string gate(ManagerEnvironmentConfiguration::getLMM() + "/models/Gate/gate.3ds");
+   std::string satelite(ManagerEnvironmentConfiguration::getLMM() + "/models/Spacemodels/Satellite/satellite.3ds");
 
    //SkyBox Textures readily available
    std::vector< std::string > skyBoxImageNames; //vector to store texture paths
@@ -777,11 +778,12 @@ void Aftr::GLViewNewModule::loadMap()
     worldLst->push_back(tmpMarker);
     marker1 = tmpMarker;
 
-    checkpointProp3 = WO::New(gate, Vector(3, 3, 3), MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp3 = WO::New(satelite, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
     checkpointProp3->setPosition(-3522, -3067, 757);
     checkpointProp3->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    //checkpointProp3->rotateAboutGlobalZ(5);
     worldLst->push_back(checkpointProp3);
-    checkpointProp3->rotateAboutGlobalZ(5);
+
 
    createNewModuleWayPoints();
 
