@@ -436,6 +436,9 @@ void GLViewNewModule::updateWorld()
    {
        theGUI->boostValue = "Boost: Max";
    }
+   checkpointProp2->rotateAboutGlobalZ(400 * (PI / 100) * 0.0005);
+   checkpointProp2b->rotateAboutGlobalZ(400 * (PI / 100) * 0.001);
+   checkpointProp2b->moveRelative(checkpointProp2b->getLookDirection() * 0.01 * -500);
 }
 
 
@@ -447,7 +450,7 @@ void GLViewNewModule::onResizeWindow( GLsizei width, GLsizei height )
 
 void GLViewNewModule::onMouseDown( const SDL_MouseButtonEvent& e )
 {
-    if (theGUI->onGoing == false)
+    //if (theGUI->onGoing == false)
     {
         GLView::onMouseDown(e);
     }
@@ -609,8 +612,11 @@ void Aftr::GLViewNewModule::loadMap()
    
    std::string startingPillar(ManagerEnvironmentConfiguration::getLMM() + "/models/race_drag_start_and_finish_line.glb");
    std::string donut(ManagerEnvironmentConfiguration::getLMM() + "/models/donut.glb");
+   std::string planetIce(ManagerEnvironmentConfiguration::getLMM() + "/models/Spacemodels/Planet Ice/planet_ice.3ds");
+   std::string earth(ManagerEnvironmentConfiguration::getLMM() + "/models/Spacemodels/Planet Earth/planet_earth.3ds");
+   std::string moon(ManagerEnvironmentConfiguration::getLMM() + "/models/moon.fbx");
+   std::string gate(ManagerEnvironmentConfiguration::getLMM() + "/models/Gate/gate.3ds");
 
-   
    //SkyBox Textures readily available
    std::vector< std::string > skyBoxImageNames; //vector to store texture paths
    //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_water+6.jpg" );
@@ -703,6 +709,27 @@ void Aftr::GLViewNewModule::loadMap()
     startingLocation->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
     worldLst->push_back(startingLocation);
 
+    //earth
+    checkpointProp2 = WO::New(earth, Vector(3, 3, 3), MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp2->setPosition(-237, -3873, 851);
+    checkpointProp2->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(checkpointProp2);
+    checkpointProp2->rotateAboutRelX(1);
+
+    WO* checkpointProp2ba = WO::New(moon, Vector(0.1, 0.1, 0.1), MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp2ba->setPosition(-237, -3623, 851);
+    checkpointProp2ba->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    checkpointProp2ba->upon_async_model_loaded([checkpointProp2ba]()
+        {
+            std::string texture(ManagerEnvironmentConfiguration::getLMM() + "/images/moon.jpg");
+    ModelMeshSkin skin(ManagerTex::loadTexAsync(texture).value());
+    skin.setMeshShadingType(MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp2ba->getModel()->getModelDataShared()->getModelMeshes().at(0)->addSkin(std::move(skin));
+    checkpointProp2ba->getModel()->getModelDataShared()->getModelMeshes().at(0)->useNextSkin();
+        });
+    worldLst->push_back(checkpointProp2ba);
+    checkpointProp2b = checkpointProp2ba;
+
     // starting pillar thing
     WO* startingLine = WO::New(startingPillar, Vector(5, 5, 5), MESH_SHADING_TYPE::mstAUTO);
     startingLine->upon_async_model_loaded([startingLine]()
@@ -750,6 +777,12 @@ void Aftr::GLViewNewModule::loadMap()
     worldLst->push_back(tmpMarker);
     marker1 = tmpMarker;
 
+    checkpointProp3 = WO::New(gate, Vector(3, 3, 3), MESH_SHADING_TYPE::mstAUTO);
+    checkpointProp3->setPosition(-3522, -3067, 757);
+    checkpointProp3->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+    worldLst->push_back(checkpointProp3);
+    checkpointProp3->rotateAboutGlobalZ(5);
+
    createNewModuleWayPoints();
 
    // ADDITIONAL THINGS DONE BY ME
@@ -771,9 +804,6 @@ void Aftr::GLViewNewModule::loadMap()
    camIPose = cam->getPose();
    jetPose = jet->getPose();
    spaceShipPose = spaceShip->getPose();
-
-
-   cam->setCameraVelocity(500);
 }
 
 
@@ -838,6 +868,9 @@ void Aftr::GLViewNewModule::buildCourseAsteroidGuide()
     //    locations.push_back(Vector(one, two, three));
     //}
     //ins.close();
+
+    //checkpointProp2b->setParentWorldObject(checkpointProp2);
+    //checkpointProp2b->lockWRTparent_using_current_relative_pose();
 
     locations = {
         Vector(236.506, 113.390, 21.773),

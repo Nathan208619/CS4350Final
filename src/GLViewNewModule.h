@@ -50,12 +50,14 @@ public:
    WO* spaceShip;
    WO* user;
 
-
    WO* startingLocation;// starting location
    WO* startingLine; // starting line
    WO* marker1;
 
    WO* holder; // for rotation
+   WO* checkpointProp2;
+   WO* checkpointProp2b;
+   WO* checkpointProp3;
 
    bool firstCheck = false;
    bool secondCheck = false;
@@ -83,7 +85,6 @@ public:
 
    Mat4 jetPose;
    Mat4 spaceShipPose;
-
 
    // space object functions
    void placeAsteroid(Vector location);
