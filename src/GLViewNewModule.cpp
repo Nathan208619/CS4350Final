@@ -447,7 +447,10 @@ void GLViewNewModule::onResizeWindow( GLsizei width, GLsizei height )
 
 void GLViewNewModule::onMouseDown( const SDL_MouseButtonEvent& e )
 {
-   GLView::onMouseDown( e );
+    if (theGUI->onGoing == false)
+    {
+        GLView::onMouseDown(e);
+    }
 }
 
 
@@ -768,6 +771,9 @@ void Aftr::GLViewNewModule::loadMap()
    camIPose = cam->getPose();
    jetPose = jet->getPose();
    spaceShipPose = spaceShip->getPose();
+
+
+   cam->setCameraVelocity(500);
 }
 
 
