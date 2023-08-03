@@ -39,6 +39,8 @@ namespace Aftr
 		std::string boostValue;
 
 		bool twoPlayer;
+		bool beginGame;
+
 		bool connected;
 		bool firstPlayer;
 		bool secondPlayer;

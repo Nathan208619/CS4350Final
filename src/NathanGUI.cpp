@@ -19,7 +19,32 @@ void NathanGUI::onUpdateWO()
 
 void NathanGUI::drawImGui_for_this_frame()
 {
+	if (beginGame == false)
+	{
+		ImGui::Begin("Main Menu");
+		if (ImGui::Button("Single Player"))
+		{
+			beginGame = true;
+		}
+
+		if (ImGui::Button("Multiplayer"))
+		{
+			beginGame = true;
+			secondPlayer = true;
+		}
+
+		ImGui::End();
+	}
+	else
+	{
+
 	ImGui::Begin("Racing Console");
+
+	if (firstPlayer || secondPlayer)
+	{
+		ImGui::Text("Player Two");
+		ImGui::Separator();
+	}
 
 	ImGui::Text(winner.c_str());
 
@@ -118,7 +143,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Separator();
 
-	if (firstPlayer == false && secondPlayer == false)
+	/*if (firstPlayer == false && secondPlayer == false)
 	{
 		if (ImGui::Button("First Player"))
 		{
@@ -135,11 +160,11 @@ void NathanGUI::drawImGui_for_this_frame()
 		}
 
 		ImGui::Separator();
-	}
+	}*/
 
-	ImGui::Text(currIssue.c_str());
+	//ImGui::Text(currIssue.c_str());
 
-	ImGui::Separator();
+	//ImGui::Separator();
 
 	if(ImGui::Button("Change Style"))
 	{
@@ -156,6 +181,15 @@ void NathanGUI::drawImGui_for_this_frame()
 	}
 
 	ImGui::End();
+
+	ImGui::Begin("Issues");
+
+	ImGui::Text(currIssue.c_str());
+
+	ImGui::End();
+
+
+	}//top else statement
 }
 
 void NathanGUI::onCreate(float width, float height)
@@ -183,6 +217,8 @@ void NathanGUI::onCreate(float width, float height)
 	boostValue = "Boost: MAX";
 
 	twoPlayer = false;
+	beginGame = false;
+
 	connected = false;
 	firstPlayer = false;
 	secondPlayer = false;

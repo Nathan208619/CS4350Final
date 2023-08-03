@@ -165,7 +165,6 @@ void NathanMsg::onMessageArrived()
 			ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->winner = "Winner: PLAYER ONE!!!";
 		}
 	}
-	std::cout << "Message Recieved" << std::endl;
 }
 
 std::string NathanMsg::toString() const
