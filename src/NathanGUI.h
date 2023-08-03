@@ -3,6 +3,8 @@
 #include "WOImGui.h"
 #include "WOImGuiAbstract.h"
 #include "AftrImGuiIncludes.h"
+#include "irrKlang.h"
+
 	
 namespace Aftr
 {
@@ -58,6 +60,10 @@ namespace Aftr
 		bool meReset;
 
 		std::string winner;
+
+		irrklang::ISoundEngine* buttonEngine;
+		irrklang::ISound* buttonSound;
+		std::string buttonSoundString;
 
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};

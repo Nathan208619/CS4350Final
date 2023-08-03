@@ -8,6 +8,8 @@
 #include "NetMsgCreateWO.h"
 #include "NathanMsg.h"
 
+#include "irrKlang.h"
+
 
 namespace Aftr
 {
@@ -96,6 +98,27 @@ public:
 
    //multiplayer stuff
    NetMessengerClient* client;
+
+   //noise
+   irrklang::ISoundEngine* backgroundMusic;
+   std::string background;
+
+   irrklang::ISoundEngine* vehicleDriving;
+   //drivingSound = vehicleDriving->play2D(driving.c_str(), true, false, true);
+   irrklang::ISound* drivingSound;
+   std::string driving;
+
+   irrklang::ISoundEngine* vehicleBoosting;
+   irrklang::ISound* boostSound;
+   std::string boosting;
+   
+   irrklang::ISoundEngine* victorySound;
+   irrklang::ISound* winSound;
+   std::string vicSound;
+
+   irrklang::ISoundEngine* countdownEngine;
+   irrklang::ISound* countdownSound;
+   std::string countdownString;
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );

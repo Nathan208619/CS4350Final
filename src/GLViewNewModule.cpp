@@ -164,6 +164,8 @@ void GLViewNewModule::updateWorld()
         redCube->setParentWorldObject(cam);
         redCube->lockWRTparent_using_current_relative_pose();
         theGUI->lockRacer = false;
+        countdownSound = countdownEngine->play2D(countdownString.c_str(), false, false, true);
+        countdownSound->setVolume(0.1);
 
         if ((theGUI->firstPlayer == true || theGUI->secondPlayer == true) && theGUI->vSet == false)
         {
@@ -188,6 +190,7 @@ void GLViewNewModule::updateWorld()
 
     if (theGUI->raceStart == true)
     {
+
         theGUI->countdown -= 0.01667;
         theGUI->countdownText = std::to_string(theGUI->countdown);
 
@@ -228,6 +231,9 @@ void GLViewNewModule::updateWorld()
     if (cam->getPosition().x > 110 && cam->getPosition().x < 150 && cam->getPosition().y > -77 && cam->getPosition().y < 85
         && cam->getPosition().z > -25 && cam->getPosition().z < 65 && theGUI->raceFinshed == false && fourthCheck == true)
     {
+        winSound = backgroundMusic->play2D(vicSound.c_str(), false, false, true);
+        winSound->setVolume(0.1);
+
         theGUI->raceFinshed = true; 
         theGUI->onGoing = false;
         theGUI->unlockRacer = true;
@@ -418,6 +424,15 @@ void GLViewNewModule::updateWorld()
    checkpointProp2->rotateAboutGlobalZ(400 * (PI / 100) * 0.0005);
    checkpointProp2b->rotateAboutGlobalZ(400 * (PI / 100) * 0.001);
    checkpointProp2b->moveRelative(checkpointProp2b->getLookDirection() * 0.01 * -500);
+
+   if (theGUI->onGoing == true)
+   {
+       drivingSound->setVolume(0.5);
+   }
+   else
+   {
+       drivingSound->setVolume(0);
+   }
 }
 
 
@@ -429,7 +444,7 @@ void GLViewNewModule::onResizeWindow( GLsizei width, GLsizei height )
 
 void GLViewNewModule::onMouseDown( const SDL_MouseButtonEvent& e )
 {
-    //if (theGUI->onGoing == false)
+    if (theGUI->onGoing == false)
     {
         GLView::onMouseDown(e);
     }
@@ -472,10 +487,12 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
    }
    if (key.keysym.sym == SDLK_SPACE)
    {
-       if (!pressSpace && boost >= 5)
+       if (!pressSpace && boost >= 5 && theGUI->onGoing)
        {
             pressSpace = true;
             speed *= 2;
+            boostSound = vehicleBoosting->play2D(boosting.c_str(), false, false, true);
+            boostSound->setVolume(0.1);
        }
    }
    if (key.keysym.sym == SDLK_LSHIFT)
@@ -613,20 +630,20 @@ void Aftr::GLViewNewModule::loadMap()
 
    { 
       ////Create the infinite grass plane (the floor)
-      WO* wo = WO::New( grass, Vector( 1, 1, 1 ), MESH_SHADING_TYPE::mstFLAT );
-      wo->setPosition( Vector( 0, 0, 0 ) );
-      wo->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
-      wo->upon_async_model_loaded( [wo]()
-         {
-            ModelMeshSkin& grassSkin = wo->getModel()->getModelDataShared()->getModelMeshes().at( 0 )->getSkins().at( 0 );
-            grassSkin.getMultiTextureSet().at( 0 ).setTexRepeats( 5.0f );
-            grassSkin.setAmbient( aftrColor4f( 0.4f, 0.4f, 0.4f, 1.0f ) ); //Color of object when it is not in any light
-            grassSkin.setDiffuse( aftrColor4f( 1.0f, 1.0f, 1.0f, 1.0f ) ); //Diffuse color components (ie, matte shading color of this object)
-            grassSkin.setSpecular( aftrColor4f( 0.4f, 0.4f, 0.4f, 1.0f ) ); //Specular color component (ie, how "shiney" it is)
-            grassSkin.setSpecularCoefficient( 10 ); // How "sharp" are the specular highlights (bigger is sharper, 1000 is very sharp, 10 is very dull)
-         } );
-      wo->setLabel( "Grass" );
-      worldLst->push_back( wo );
+      //WO* wo = WO::New( grass, Vector( 1, 1, 1 ), MESH_SHADING_TYPE::mstFLAT );
+      //wo->setPosition( Vector( 0, 0, 0 ) );
+      //wo->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
+      //wo->upon_async_model_loaded( [wo]()
+      //   {
+      //      ModelMeshSkin& grassSkin = wo->getModel()->getModelDataShared()->getModelMeshes().at( 0 )->getSkins().at( 0 );
+      //      grassSkin.getMultiTextureSet().at( 0 ).setTexRepeats( 5.0f );
+      //      grassSkin.setAmbient( aftrColor4f( 0.4f, 0.4f, 0.4f, 1.0f ) ); //Color of object when it is not in any light
+      //      grassSkin.setDiffuse( aftrColor4f( 1.0f, 1.0f, 1.0f, 1.0f ) ); //Diffuse color components (ie, matte shading color of this object)
+      //      grassSkin.setSpecular( aftrColor4f( 0.4f, 0.4f, 0.4f, 1.0f ) ); //Specular color component (ie, how "shiney" it is)
+      //      grassSkin.setSpecularCoefficient( 10 ); // How "sharp" are the specular highlights (bigger is sharper, 1000 is very sharp, 10 is very dull)
+      //   } );
+      //wo->setLabel( "Grass" );
+      //worldLst->push_back( wo );
    }
 
    // player vehicle
@@ -704,13 +721,6 @@ void Aftr::GLViewNewModule::loadMap()
     checkpoint1->rotateAboutGlobalX(0.9);
     checkpoint1->rotateAboutGlobalZ(1);
 
-    //checkpoint1 marker
-    WO* tmpMarker = WO::New(shinyRedPlasticCube, Vector(10, 10, 10), MESH_SHADING_TYPE::mstAUTO);
-    tmpMarker->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
-    tmpMarker->setPosition(1279, -1370, 456);
-    worldLst->push_back(tmpMarker);
-    marker1 = tmpMarker;
-
     checkpointProp3 = WO::New(satelite, Vector(1, 1, 1), MESH_SHADING_TYPE::mstAUTO);
     checkpointProp3->setPosition(-3522, -3067, 757);
     checkpointProp3->renderOrderType = RENDER_ORDER_TYPE::roOPAQUE;
@@ -743,6 +753,27 @@ void Aftr::GLViewNewModule::loadMap()
    camIPose = cam->getPose();
    jetPose = jet->getPose();
    spaceShipPose = spaceShip->getPose();
+    
+//noise
+   //background
+   backgroundMusic = irrklang::createIrrKlangDevice();
+   background = ManagerEnvironmentConfiguration::getLMM() + "sounds/spaceMusic.mp3";
+   irrklang::ISound* spaceMusic = backgroundMusic->play2D(background.c_str(), true, false, true);
+   spaceMusic->setVolume(0.1);
+
+   victorySound = irrklang::createIrrKlangDevice();
+   vicSound = ManagerEnvironmentConfiguration::getLMM() + "sounds/winnerSound.mp3";
+
+   vehicleBoosting = irrklang::createIrrKlangDevice();
+   boosting = ManagerEnvironmentConfiguration::getLMM() + "sounds/boost.mp3";
+
+   vehicleDriving = irrklang::createIrrKlangDevice();
+   driving = ManagerEnvironmentConfiguration::getLMM() + "sounds/driving.mp3";
+   drivingSound = vehicleDriving->play2D(driving.c_str(), true, false, true);
+   drivingSound->setVolume(0);
+
+   countdownEngine = irrklang::createIrrKlangDevice();
+   countdownString = ManagerEnvironmentConfiguration::getLMM() + "sounds/countdown.mp3";
 }
 
 

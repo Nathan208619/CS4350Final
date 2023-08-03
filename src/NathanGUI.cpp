@@ -24,11 +24,15 @@ void NathanGUI::drawImGui_for_this_frame()
 		ImGui::Begin("Main Menu");
 		if (ImGui::Button("Single Player"))
 		{
+			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+			buttonSound->setVolume(0.2);
 			beginGame = true;
 		}
 
 		if (ImGui::Button("Multiplayer"))
 		{
+			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+			buttonSound->setVolume(0.2);
 			beginGame = true;
 			secondPlayer = true;
 		}
@@ -52,6 +56,8 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (ImGui::Button(startReset.c_str()))
 	{
+		buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+		buttonSound->setVolume(0.2);
 		if (vehicleChosen == false)
 		{
 			currIssue = "Current Issue: Must choose Vehicle to race";
@@ -105,6 +111,8 @@ void NathanGUI::drawImGui_for_this_frame()
 
 		if(ImGui::Button("Jet"))
 		{
+			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+			buttonSound->setVolume(0.2);
 			if (jetTaken == true)
 			{
 				currIssue = "Current Issue: Another player has selected the Jet, please select another vehicle";
@@ -121,6 +129,8 @@ void NathanGUI::drawImGui_for_this_frame()
 		ImGui::SameLine();
 		if(ImGui::Button("SpaceShip"))
 		{
+			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+			buttonSound->setVolume(0.2);
 			if (spaceShipTaken == true)
 			{
 				currIssue = "Current Issue: Another player has selected the Spaceship, please select another vehicle";
@@ -168,8 +178,11 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if(ImGui::Button("Change Style"))
 	{
+		buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false , false, true);
+		buttonSound->setVolume(0.2);
 		if (style1 == false)
 		{
+
 			ImGui::StyleColorsLight();
 			style1 = true;
 		}
@@ -236,6 +249,9 @@ void NathanGUI::onCreate(float width, float height)
 	meReset = false;
 
 	winner = "Winner: -----";
+
+	buttonEngine = irrklang::createIrrKlangDevice();
+	buttonSoundString = ManagerEnvironmentConfiguration::getLMM() + "sounds/button.mp3";
 
 	bobcatStyle();
 }
