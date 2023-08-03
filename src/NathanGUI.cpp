@@ -34,7 +34,7 @@ void NathanGUI::drawImGui_for_this_frame()
 			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
 			buttonSound->setVolume(0.2);
 			beginGame = true;
-			secondPlayer = true;
+			firstPlayer = true;
 		}
 
 		ImGui::End();
@@ -46,7 +46,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (firstPlayer || secondPlayer)
 	{
-		ImGui::Text("Player Two");
+		ImGui::Text("Player One");
 		ImGui::Separator();
 	}
 
