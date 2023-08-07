@@ -34,7 +34,15 @@ void NathanGUI::drawImGui_for_this_frame()
 			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
 			buttonSound->setVolume(0.2);
 			beginGame = true;
-			firstPlayer = true;
+			secondPlayer = true;
+		}
+
+		if (ImGui::Button("Play VS CPU"))
+		{
+			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
+			buttonSound->setVolume(0.2);
+			beginGame = true;
+			playCPU = true;
 		}
 
 		ImGui::End();
@@ -46,7 +54,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (firstPlayer || secondPlayer)
 	{
-		ImGui::Text("Player One");
+		ImGui::Text("Player Two");
 		ImGui::Separator();
 	}
 
@@ -153,29 +161,6 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Separator();
 
-	/*if (firstPlayer == false && secondPlayer == false)
-	{
-		if (ImGui::Button("First Player"))
-		{
-			firstPlayer = true;
-			currPlayer = "Your are First Player";
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("second Player"))
-		{
-			secondPlayer = true;
-			currPlayer = "Your are Second Player";
-		}
-
-		ImGui::Separator();
-	}*/
-
-	//ImGui::Text(currIssue.c_str());
-
-	//ImGui::Separator();
-
 	if(ImGui::Button("Change Style"))
 	{
 		buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false , false, true);
@@ -252,6 +237,9 @@ void NathanGUI::onCreate(float width, float height)
 
 	buttonEngine = irrklang::createIrrKlangDevice();
 	buttonSoundString = ManagerEnvironmentConfiguration::getLMM() + "sounds/button.mp3";
+
+	playCPU = false;
+	CPUwin = false;
 
 	bobcatStyle();
 }

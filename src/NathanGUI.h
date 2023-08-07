@@ -65,6 +65,9 @@ namespace Aftr
 		irrklang::ISound* buttonSound;
 		std::string buttonSoundString;
 
+		bool playCPU;
+		bool CPUwin;
+
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};
 		//NathanGUI(WOGUI* parentWOGUI);

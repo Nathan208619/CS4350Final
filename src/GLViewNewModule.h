@@ -95,6 +95,8 @@ public:
    void setVehicle();
    void unlock();
    void multiplayerReset();
+   void setJetCPUPath();
+   void setspaceShipCPUPath();
 
    //multiplayer stuff
    NetMessengerClient* client;
@@ -119,6 +121,11 @@ public:
    irrklang::ISoundEngine* countdownEngine;
    irrklang::ISound* countdownSound;
    std::string countdownString;
+
+   WO* CPU;
+   std::vector<Mat4> jetCPUPath;
+   std::vector<Mat4> spaceShipCPUPath;
+   int CPUindex;
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );
