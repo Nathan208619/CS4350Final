@@ -38,6 +38,7 @@
 #include <GL/glew.h>
 
 #include<fstream>
+#include <winsock.h>
 
 
 
@@ -102,13 +103,21 @@ void GLViewNewModule::updateWorld()
     //*****************Multiplayer Stuff********************************
     if (theGUI->firstPlayer == true && theGUI->connected == false)
     {
-        client = NetMessengerClient::New("127.0.0.1", "12685");
+        std::string IPaddress;
+        std::cout << "Enter server IP Address" << std::endl;
+        std::cin >> IPaddress;
+        client = NetMessengerClient::New(IPaddress, "12685");
+        //client = NetMessengerClient::New("127.0.0.1", "12685");
         theGUI->connected = true;
     }
 
     if (theGUI->secondPlayer == true && theGUI->connected == false)
     {
-        client = NetMessengerClient::New("127.0.0.1", "12683");
+        std::string IPaddress;
+        std::cout << "Enter server IP Address" << std::endl;
+        std::cin >> IPaddress;
+        client = NetMessengerClient::New(IPaddress, "12683");
+        //client = NetMessengerClient::New("127.0.0.1", "12683");
         theGUI->connected = true;
     }
 
@@ -570,7 +579,7 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        std::cout << curr.y << std::endl;
        std::cout << curr.z << std::endl;
 
-       std::cout << CPUindex << std::endl;
+       /*std::cout << CPUindex << std::endl;
        std::cout << spaceShipCPUPath.size() << std::endl;
         jet->setPose(Mat4("1.000 0.000 0.000  80.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true));
        std::ofstream outs;
@@ -579,7 +588,7 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        {
            outs << spaceShipCPUPath.at(i).toString() << std::endl;
        }
-       outs.close();
+       outs.close();*/
    }
 }
 
@@ -614,6 +623,25 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    if (key.keysym.sym == SDLK_LCTRL)
    {
        pressLctrl = false;
+       //system("C:\\Windows\\System32\\ipconfig");
+       //getchar();
+
+
+       int argc = 0;
+       char* argv[10000];
+       std::string name;
+       //ipAdd(argc, argv);
+       /*std::cout << "what is your name?" << std::endl;
+       std::cin >> name;
+       std::cout << name << std::endl;*/
+
+       if (theGUI->secondPlayer == true)
+       {
+           name = client->getLocalIpAddressesStrings();
+           int n = name.rfind("\n");
+           name = name.substr(n);
+           std::cout << name << std::endl;
+       }
    }
 }
 
@@ -846,8 +874,8 @@ void Aftr::GLViewNewModule::loadMap()
    countdownEngine = irrklang::createIrrKlangDevice();
    countdownString = ManagerEnvironmentConfiguration::getLMM() + "sounds/countdown.mp3";
 
-   setJetCPUPath();
-   setspaceShipCPUPath();
+   //setJetCPUPath();
+   //setspaceShipCPUPath();
    CPUindex = 0;
 }
 
