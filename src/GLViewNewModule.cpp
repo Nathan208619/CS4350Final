@@ -183,7 +183,7 @@ void GLViewNewModule::updateWorld()
         theGUI->vehicleSet = true;
         NathanMsg msg;
         msg.jetGone = true;
-        client->sendNetMsgSynchronousTCP(msg);
+        client->sendNetMsgSynchronousUDP(msg);
     }
 
     if (theGUI->spaceShip == true && theGUI->spaceShipTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
