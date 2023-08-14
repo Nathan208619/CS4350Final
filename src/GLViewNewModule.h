@@ -66,7 +66,6 @@ public:
    bool thirdCheck = false;
    bool fourthCheck = false;
 
-
    bool pressW;
    bool pressA;
    bool pressS;
@@ -100,6 +99,7 @@ public:
 
    //multiplayer stuff
    NetMessengerClient* client;
+   bool secondPlayerConnected;
 
    //noise
    irrklang::ISoundEngine* backgroundMusic;
@@ -126,45 +126,6 @@ public:
    std::vector<Mat4> jetCPUPath;
    std::vector<Mat4> spaceShipCPUPath;
    int CPUindex;
-
-   int doit(int, char**)
-   {
-       char ac[80];
-       if (gethostname(ac, sizeof(ac)) == SOCKET_ERROR) {
-           std::cerr << "Error " << WSAGetLastError() <<
-               " when getting local host name." << std::endl;
-           return 1;
-       }
-       std::cout << "Host name is " << ac << "." << std::endl;
-
-       struct hostent* phe = gethostbyname(ac);
-       if (phe == 0) {
-           std::cerr << "Yow! Bad host lookup." << std::endl;
-           return 1;
-       }
-
-       for (int i = 0; phe->h_addr_list[i] != 0; ++i) {
-           struct in_addr addr;
-           memcpy(&addr, phe->h_addr_list[i], sizeof(struct in_addr));
-           std::cout << "Address " << i << ": " << inet_ntoa(addr) << std::endl;
-       }
-
-       return 0;
-   }
-
-   int ipAdd(int argc, char* argv[])
-   {
-       WSAData wsaData;
-       if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0) {
-           return 255;
-       }
-
-       int retval = doit(argc, argv);
-
-       WSACleanup();
-
-       return retval;
-   }
 
 protected:
    GLViewNewModule( const std::vector< std::string >& args );

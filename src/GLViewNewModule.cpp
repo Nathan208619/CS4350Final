@@ -103,22 +103,48 @@ void GLViewNewModule::updateWorld()
     //*****************Multiplayer Stuff********************************
     if (theGUI->firstPlayer == true && theGUI->connected == false)
     {
-        std::string IPaddress;
-        std::cout << "Enter server IP Address" << std::endl;
-        //std::cin >> IPaddress;
-        //client = NetMessengerClient::New(IPaddress, "12685");
+        //std::string IPaddress;
+        //std::cout << "Enter server IP Address" << std::endl;
+        ////std::cin >> IPaddress;
+        ////client = NetMessengerClient::New(IPaddress, "12685");
+
         client = NetMessengerClient::New("127.0.0.1", "12685");
+        std::string IPaddress;
+        IPaddress = client->getLocalIpAddressesStrings();
+        auto n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(0, n);
+        n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(n + 3);
+        client = NetMessengerClient::New(IPaddress, "12685");
+        NathanMsg msg;
+        msg.address = IPaddress;
+        msg.connection = true;
+        client->sendNetMsgSynchronousTCP(msg);
         theGUI->connected = true;
+    }
+
+    if (secondPlayerConnected == true && theGUI->secondPlayer == true && theGUI->connected == false)
+    {
+        std::string IPaddress;
+        IPaddress = client->getLocalIpAddressesStrings();
+        auto n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(0, n);
+        n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(n + 3);
+        NathanMsg msg;
+        msg.address = IPaddress;
+        msg.connectfirst = true;
+        client->sendNetMsgSynchronousTCP(msg);
     }
 
     if (theGUI->secondPlayer == true && theGUI->connected == false)
     {
-        std::string IPaddress;
-        std::cout << "Enter server IP Address" << std::endl;
-        //std::cin >> IPaddress;
-        //client = NetMessengerClient::New(IPaddress, "12683");
-        client = NetMessengerClient::New("127.0.0.1", "12683");
-        theGUI->connected = true;
+        //std::string IPaddress;
+        //std::cout << "Enter server IP Address" << std::endl;
+        ////std::cin >> IPaddress;
+        ////client = NetMessengerClient::New(IPaddress, "12683");
+        //client = NetMessengerClient::New("127.0.0.1", "12683");
+        //theGUI->connected = true;
     }
 
     if (theGUI->jet == true && theGUI->jetTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
@@ -578,17 +604,6 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
        std::cout << curr.x << std::endl;
        std::cout << curr.y << std::endl;
        std::cout << curr.z << std::endl;
-
-       /*std::cout << CPUindex << std::endl;
-       std::cout << spaceShipCPUPath.size() << std::endl;
-        jet->setPose(Mat4("1.000 0.000 0.000  80.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true));
-       std::ofstream outs;
-       outs.open("spaceShipPath.txt");
-       for (size_t i = 0; i < spaceShipCPUPath.size(); i++)
-       {
-           outs << spaceShipCPUPath.at(i).toString() << std::endl;
-       }
-       outs.close();*/
    }
 }
 
@@ -623,21 +638,10 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    if (key.keysym.sym == SDLK_LCTRL)
    {
        pressLctrl = false;
-       //system("C:\\Windows\\System32\\ipconfig");
-       //getchar();
-
-
-       int argc = 0;
-       char* argv[10000];
-       std::string name;
-       //ipAdd(argc, argv);
-       /*std::cout << "what is your name?" << std::endl;
-       std::cin >> name;
-       std::cout << name << std::endl;*/
 
        if (theGUI->secondPlayer == true)
        {
-           name = client->getLocalIpAddressesStrings();
+           std::string name = client->getLocalIpAddressesStrings();
            std::cout << name << std::endl;
            auto n = name.rfind(":");
            name = name.substr(0, n);
@@ -852,6 +856,8 @@ void Aftr::GLViewNewModule::loadMap()
    pressLshift = false;
    pressLctrl = false;
 
+   secondPlayerConnected = false;
+
    //vehicleIPose = redCube->getPose();
    camIPose = cam->getPose();
    jetPose = jet->getPose();
@@ -881,6 +887,7 @@ void Aftr::GLViewNewModule::loadMap()
    //setJetCPUPath();
    //setspaceShipCPUPath();
    CPUindex = 0;
+
 }
 
 
@@ -7841,7 +7848,8 @@ void Aftr::GLViewNewModule::setJetCPUPath()
 
 void Aftr::GLViewNewModule::setspaceShipCPUPath()
 {
-spaceShipCPUPath = {(Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
+spaceShipCPUPath = 
+{(Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
 (Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
 (Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
 (Mat4("1.000 0.000 0.000 64.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),

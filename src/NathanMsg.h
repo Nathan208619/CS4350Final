@@ -45,6 +45,9 @@ namespace Aftr
 		int victory = false;
 		float bestTime = 0;
 		
+		std::string address = "";
+		int connection = false;
+		int connectfirst = false;
 
 	protected:
 

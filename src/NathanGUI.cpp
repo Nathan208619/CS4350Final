@@ -54,7 +54,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (firstPlayer || secondPlayer)
 	{
-		ImGui::Text("Player One");
+		ImGui::Text("Player Two");
 		ImGui::Separator();
 	}
 

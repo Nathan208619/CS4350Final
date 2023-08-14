@@ -35,6 +35,9 @@ NathanMsg::NathanMsg()
 	this->zPos = 0;
 	this->yRot = 0;
 	this->zRot = 0;
+	this->address = "";
+	this->connection = false;
+	this->connectfirst = false;
 }
 
 NathanMsg::~NathanMsg()
@@ -60,6 +63,9 @@ bool NathanMsg::toStream(NetMessengerStreamBuffer& os) const
 	os << this->zPos;
 	os << this->yRot;
 	os << this->zRot;
+	os << this->address;
+	os << this->connection;
+	os << this->connectfirst;
 	return true;
 }
 
@@ -82,11 +88,23 @@ bool NathanMsg::fromStream(NetMessengerStreamBuffer& is)
 	is >> this->zPos;
 	is >> this->yRot;
 	is >> this->zRot;
+	is >> this->address;
+	is >> this->connection;
+	is >> this->connectfirst;
 	return true;
 }
 
 void NathanMsg::onMessageArrived()
 {
+	if (connection == true)
+	{
+		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12683");
+		ManagerGLView::getGLViewT<GLViewNewModule>()->secondPlayerConnected = true;
+	}
+	if (connectfirst == true)
+	{
+		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12685");
+	}
 	//std::cout << "Message has arrived... " << this->toString() << "\n";
 	if (jetGone == true)
 	{
