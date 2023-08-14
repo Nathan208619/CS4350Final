@@ -108,7 +108,8 @@ void GLViewNewModule::updateWorld()
         ////std::cin >> IPaddress;
         ////client = NetMessengerClient::New(IPaddress, "12685");
 
-        client = NetMessengerClient::New("127.0.0.1", "12685");
+        //client = NetMessengerClient::New("127.0.0.1", "12685");
+        client = NetMessengerClient::New("192.168.1.168", "12685");
         /*std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
         auto n = IPaddress.rfind(":");
@@ -161,7 +162,7 @@ void GLViewNewModule::updateWorld()
         ////client = NetMessengerClient::New(IPaddress, "12683");
         //client = NetMessengerClient::New("127.0.0.1", "12683");
 
-        client = NetMessengerClient::New("127.0.0.1", "12683");
+        client = NetMessengerClient::New("192.168.1.168", "12683");
         //std::string IPaddress;
         //IPaddress = client->getLocalIpAddressesStrings();
         //auto n = IPaddress.rfind(":");
@@ -1191,6 +1192,7 @@ void Aftr::GLViewNewModule::multiplayerReset()
 }
 void Aftr::GLViewNewModule::setJetCPUPath()
 {
+    /*
     jetCPUPath = { (Mat4("1.000 0.000 0.000  62.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
 (Mat4("1.000 0.000 0.000  64.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
 (Mat4("1.000 0.000 0.000  66.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
@@ -7870,10 +7872,12 @@ void Aftr::GLViewNewModule::setJetCPUPath()
 (Mat4("0.991 -0.133 -0.000 119.707 \n 0.133  0.991 -0.000  -3.935 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.991 -0.133 -0.000 121.689 \n 0.133  0.991 -0.000  -3.669 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.991 -0.133 -0.000 121.689 \n 0.133  0.991 -0.000  -3.669 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.00", true))};
+    */
 }
 
 void Aftr::GLViewNewModule::setspaceShipCPUPath()
 {
+    /*
 spaceShipCPUPath = 
 {(Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
 (Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
@@ -14904,5 +14908,5 @@ spaceShipCPUPath =
 (Mat4("0.960 -0.279 -0.000 124.330 \n 0.279  0.960  0.000   4.096 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.960 -0.279 -0.000 124.330 \n 0.279  0.960  0.000   4.096 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.960 -0.279 -0.000 126.250 \n 0.279  0.960  0.000   4.654 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true))};
-
+*/
 }
