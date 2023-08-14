@@ -130,7 +130,8 @@ void GLViewNewModule::updateWorld()
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
-        //client = NetMessengerClient::New(IPaddress, "12685");
+        std::cout << IPaddress << std::endl;//////////////////////remove
+        client = NetMessengerClient::New(IPaddress, "12685");
         NathanMsg msg;
         msg.address = IPaddress;
         msg.connection = true;
@@ -145,6 +146,7 @@ void GLViewNewModule::updateWorld()
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
+        std::cout << IPaddress << std::endl;//////////////////////remove
         NathanMsg msg;
         msg.address = IPaddress;
         msg.connectfirst = true;
@@ -166,7 +168,8 @@ void GLViewNewModule::updateWorld()
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
-        //client = NetMessengerClient::New(IPaddress, "12683");
+        std::cout << IPaddress << std::endl;//////////////////////remove
+        client = NetMessengerClient::New(IPaddress, "12683");
         NathanMsg msg;
         msg.address = IPaddress;
         msg.connectfirst = true;
