@@ -104,100 +104,54 @@ void GLViewNewModule::updateWorld()
     //*****************Multiplayer Stuff********************************
     if (theGUI->firstPlayer == true && theGUI->connected == false)
     {
-        //std::string IPaddress;
-        //std::cout << "Enter server IP Address" << std::endl;
-        ////std::cin >> IPaddress;
-        ////client = NetMessengerClient::New(IPaddress, "12685");
-
-        //client = NetMessengerClient::New("127.0.0.1", "12685");
-        //client = NetMessengerClient::New("192.168.1.168", "12685");
-        /*std::string IPaddress;
-        IPaddress = client->getLocalIpAddressesStrings();
-        auto n = IPaddress.rfind(":");
-        IPaddress = IPaddress.substr(0, n);
-        n = IPaddress.rfind(":");
-        IPaddress = IPaddress.substr(n + 3);
-        client = NetMessengerClient::New(IPaddress, "12685");
-        NathanMsg msg;
-        msg.address = IPaddress;
-        msg.connection = true;
-        client->sendNetMsgSynchronousTCP(msg);*/
-
-        std::string IPaddress = "192.168.1.";
-        for (size_t i = 0; i < 256; i++)
-        {
-            IPaddress += std::to_string(i);
-            client = NetMessengerClient::New(IPaddress, "12685");
-            if (client->isTCPSocketOpen())
-            {
-                theGUI->connected = true;
-                break;
-            }
-        }
-    }
-    if (secondPlayerConnected == true && theGUI->firstPlayer == true)
-    {
+        client = NetMessengerClient::New("127.0.0.1", "12685");
         std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
         auto n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
-        std::cout << IPaddress << std::endl;//////////////////////remove
         client = NetMessengerClient::New(IPaddress, "12685");
-        NathanMsg msg;
-        msg.address = IPaddress;
-        msg.connection = true;
-        client->sendNetMsgSynchronousTCP(msg);
+        theGUI->connected = true;
+    }
+
+    if (secondPlayerConnected == true && theGUI->firstPlayer == true)
+    {
     }
 
     if (secondPlayerConnected == true && theGUI->secondPlayer == true)
     {
+    }
+
+    if (theGUI->secondPlayer == true && theGUI->connected == false)
+    {
+        std::string IPaddress;
+        std::cout << "Enter the IP Address of the player you would like to connect to." << std::endl;
+        std::cin >> IPaddress;
+        client = NetMessengerClient::New(IPaddress, "12683");
+        IPaddress = client->getLocalIpAddressesStrings();
+        auto n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(0, n);
+        n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(n + 3);
+        NathanMsg msg;
+        msg.address = IPaddress;
+        msg.connectfirst = true;
+        client->sendNetMsgSynchronousTCP(msg);
+        theGUI->connected = true;
+
+        /*client = NetMessengerClient::New("127.0.0.1", "12683");
         std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
         auto n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
-        std::cout << IPaddress << std::endl;//////////////////////remove
+        client = NetMessengerClient::New(IPaddress, "12683");
         NathanMsg msg;
         msg.address = IPaddress;
         msg.connectfirst = true;
-        client->sendNetMsgSynchronousTCP(msg);
-    }
-
-    if (theGUI->secondPlayer == true && theGUI->connected == false)
-    {
-        //std::string IPaddress;
-        //std::cout << "Enter server IP Address" << std::endl;
-        ////std::cin >> IPaddress;
-        ////client = NetMessengerClient::New(IPaddress, "12683");
-        //client = NetMessengerClient::New("127.0.0.1", "12683");
-
-        //client = NetMessengerClient::New("192.168.1.168", "12683");
-        //std::string IPaddress;
-        //IPaddress = client->getLocalIpAddressesStrings();
-        //auto n = IPaddress.rfind(":");
-        //IPaddress = IPaddress.substr(0, n);
-        //n = IPaddress.rfind(":");
-        //IPaddress = IPaddress.substr(n + 3);
-        //std::cout << IPaddress << std::endl;//////////////////////remove
-        //client = NetMessengerClient::New(IPaddress, "12683");
-        //NathanMsg msg;
-        //msg.address = IPaddress;
-        //msg.connectfirst = true;
-        //client->sendNetMsgSynchronousTCP(msg);
-        std::string IPaddress = "192.168.1.";
-        for (size_t i = 0; i < 256; i++)
-        {
-            IPaddress += std::to_string(i);
-            client = NetMessengerClient::New(IPaddress, "12683");
-            if (client->isTCPSocketOpen())
-            {
-                theGUI->connected = true;
-                break;
-            }
-        }
+        client->sendNetMsgSynchronousTCP(msg);*/
     }
 
     if (theGUI->jet == true && theGUI->jetTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))

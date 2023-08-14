@@ -96,7 +96,7 @@ bool NathanMsg::fromStream(NetMessengerStreamBuffer& is)
 
 void NathanMsg::onMessageArrived()
 {
-	std::cout << "Message has arrived... " << this->toString() << "\n";
+	//std::cout << "Message has arrived... " << this->toString() << "\n";
 	if (connection == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12683");
