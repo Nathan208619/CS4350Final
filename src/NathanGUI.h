@@ -68,6 +68,10 @@ namespace Aftr
 		bool playCPU;
 		bool CPUwin;
 
+		std::string firstPlayerIPAddress;
+		bool showIPAddress;
+		std::string showIPAddressText;
+
 	private:
 		NathanGUI(WOGUI* parentWOGUI) : IFace(this), WOImGuiAbstract(parentWOGUI) {};
 		//NathanGUI(WOGUI* parentWOGUI);

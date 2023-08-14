@@ -34,7 +34,7 @@ void NathanGUI::drawImGui_for_this_frame()
 			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
 			buttonSound->setVolume(0.2);
 			beginGame = true;
-			firstPlayer = true;
+			secondPlayer = true;
 		}
 
 		if (ImGui::Button("Play VS CPU"))
@@ -54,7 +54,7 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	if (firstPlayer || secondPlayer)
 	{
-		ImGui::Text("Player One");
+		ImGui::Text("Player Two");
 		ImGui::Separator();
 	}
 
@@ -161,6 +161,36 @@ void NathanGUI::drawImGui_for_this_frame()
 
 	ImGui::Separator();
 
+	if (firstPlayer == true)
+	{
+		if (ImGui::Button(showIPAddressText.c_str()))
+		{
+			if (showIPAddress == false)
+			{
+				showIPAddress = true;
+				showIPAddressText = "Hide";
+			}
+			else
+			{
+				showIPAddress = false;
+				showIPAddressText = "Show";
+			}
+		}
+	
+		ImGui::SameLine();
+
+		if (showIPAddress == true)
+		{
+			ImGui::Text(firstPlayerIPAddress.c_str());
+		}
+		else
+		{
+			ImGui::Text("IP Address Hidden");
+		}
+	
+		ImGui::Separator();
+	}
+
 	if(ImGui::Button("Change Style"))
 	{
 		buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false , false, true);
@@ -239,6 +269,10 @@ void NathanGUI::onCreate(float width, float height)
 
 	playCPU = false;
 	CPUwin = false;
+
+	firstPlayerIPAddress = "";
+	showIPAddress = false;
+	showIPAddressText = "Show";
 
 	bobcatStyle();
 }
