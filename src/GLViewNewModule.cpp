@@ -105,9 +105,9 @@ void GLViewNewModule::updateWorld()
     {
         std::string IPaddress;
         std::cout << "Enter server IP Address" << std::endl;
-        std::cin >> IPaddress;
-        client = NetMessengerClient::New(IPaddress, "12685");
-        //client = NetMessengerClient::New("127.0.0.1", "12685");
+        //std::cin >> IPaddress;
+        //client = NetMessengerClient::New(IPaddress, "12685");
+        client = NetMessengerClient::New("127.0.0.1", "12685");
         theGUI->connected = true;
     }
 
@@ -115,9 +115,9 @@ void GLViewNewModule::updateWorld()
     {
         std::string IPaddress;
         std::cout << "Enter server IP Address" << std::endl;
-        std::cin >> IPaddress;
-        client = NetMessengerClient::New(IPaddress, "12683");
-        //client = NetMessengerClient::New("127.0.0.1", "12683");
+        //std::cin >> IPaddress;
+        //client = NetMessengerClient::New(IPaddress, "12683");
+        client = NetMessengerClient::New("127.0.0.1", "12683");
         theGUI->connected = true;
     }
 
@@ -638,8 +638,12 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
        if (theGUI->secondPlayer == true)
        {
            name = client->getLocalIpAddressesStrings();
-           int n = name.rfind("\n");
-           name = name.substr(n);
+           std::cout << name << std::endl;
+           auto n = name.rfind(":");
+           name = name.substr(0, n);
+           std::cout << "**************************" << std::endl;
+           auto y = name.rfind(":");
+           name = name.substr(y + 3);
            std::cout << name << std::endl;
        }
    }

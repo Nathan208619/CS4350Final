@@ -34,7 +34,7 @@ void NathanGUI::drawImGui_for_this_frame()
 			buttonSound = buttonEngine->play2D(buttonSoundString.c_str(), false, false, true);
 			buttonSound->setVolume(0.2);
 			beginGame = true;
-			firstPlayer = true;
+			secondPlayer = true;
 		}
 
 		if (ImGui::Button("Play VS CPU"))
@@ -185,7 +185,6 @@ void NathanGUI::drawImGui_for_this_frame()
 	ImGui::Text(currIssue.c_str());
 
 	ImGui::End();
-
 
 	}//top else statement
 }
