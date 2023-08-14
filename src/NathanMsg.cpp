@@ -96,6 +96,7 @@ bool NathanMsg::fromStream(NetMessengerStreamBuffer& is)
 
 void NathanMsg::onMessageArrived()
 {
+	std::cout << "Message has arrived... " << this->toString() << "\n";
 	if (connection == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12683");
@@ -106,7 +107,6 @@ void NathanMsg::onMessageArrived()
 		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12685");
 		ManagerGLView::getGLViewT<GLViewNewModule>()->secondPlayerConnected = true;
 	}
-	//std::cout << "Message has arrived... " << this->toString() << "\n";
 	if (jetGone == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->jetTaken = true;
