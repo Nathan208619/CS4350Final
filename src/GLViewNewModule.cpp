@@ -123,7 +123,7 @@ void GLViewNewModule::updateWorld()
         theGUI->connected = true;
     }
 
-    if (secondPlayerConnected == true && theGUI->secondPlayer == true && theGUI->connected == false)
+    if (secondPlayerConnected == true && theGUI->secondPlayer == true)
     {
         std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
@@ -144,7 +144,9 @@ void GLViewNewModule::updateWorld()
         ////std::cin >> IPaddress;
         ////client = NetMessengerClient::New(IPaddress, "12683");
         //client = NetMessengerClient::New("127.0.0.1", "12683");
-        //theGUI->connected = true;
+
+        client = NetMessengerClient::New("127.0.0.1", "12685");
+        theGUI->connected = true;
     }
 
     if (theGUI->jet == true && theGUI->jetTaken == false && theGUI->vehicleSet == false && (theGUI->firstPlayer == true || theGUI->secondPlayer == true))
