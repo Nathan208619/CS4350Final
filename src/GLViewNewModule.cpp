@@ -104,14 +104,14 @@ void GLViewNewModule::updateWorld()
     //*****************Multiplayer Stuff********************************
     if (theGUI->firstPlayer == true && theGUI->connected == false)
     {
-        client = NetMessengerClient::New("127.0.0.1", "12685");
+        /*client = NetMessengerClient::New("127.0.0.1", "12685");
         std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
         auto n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(0, n);
         n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(n + 3);
-        client = NetMessengerClient::New(IPaddress, "12685");
+        client = NetMessengerClient::New(IPaddress, "12685");*/
         theGUI->connected = true;
     }
 
