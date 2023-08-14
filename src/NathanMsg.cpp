@@ -104,6 +104,7 @@ void NathanMsg::onMessageArrived()
 	if (connectfirst == true)
 	{
 		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12685");
+		ManagerGLView::getGLViewT<GLViewNewModule>()->secondPlayerConnected = true;
 	}
 	//std::cout << "Message has arrived... " << this->toString() << "\n";
 	if (jetGone == true)

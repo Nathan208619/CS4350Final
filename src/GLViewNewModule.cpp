@@ -109,7 +109,7 @@ void GLViewNewModule::updateWorld()
         ////client = NetMessengerClient::New(IPaddress, "12685");
 
         client = NetMessengerClient::New("127.0.0.1", "12685");
-        std::string IPaddress;
+        /*std::string IPaddress;
         IPaddress = client->getLocalIpAddressesStrings();
         auto n = IPaddress.rfind(":");
         IPaddress = IPaddress.substr(0, n);
@@ -119,8 +119,22 @@ void GLViewNewModule::updateWorld()
         NathanMsg msg;
         msg.address = IPaddress;
         msg.connection = true;
-        client->sendNetMsgSynchronousTCP(msg);
+        client->sendNetMsgSynchronousTCP(msg);*/
         theGUI->connected = true;
+    }
+    if (secondPlayerConnected == true && theGUI->firstPlayer == true)
+    {
+        std::string IPaddress;
+        IPaddress = client->getLocalIpAddressesStrings();
+        auto n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(0, n);
+        n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(n + 3);
+        //client = NetMessengerClient::New(IPaddress, "12685");
+        NathanMsg msg;
+        msg.address = IPaddress;
+        msg.connection = true;
+        client->sendNetMsgSynchronousTCP(msg);
     }
 
     if (secondPlayerConnected == true && theGUI->secondPlayer == true)
@@ -146,6 +160,17 @@ void GLViewNewModule::updateWorld()
         //client = NetMessengerClient::New("127.0.0.1", "12683");
 
         client = NetMessengerClient::New("127.0.0.1", "12683");
+        std::string IPaddress;
+        IPaddress = client->getLocalIpAddressesStrings();
+        auto n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(0, n);
+        n = IPaddress.rfind(":");
+        IPaddress = IPaddress.substr(n + 3);
+        //client = NetMessengerClient::New(IPaddress, "12683");
+        NathanMsg msg;
+        msg.address = IPaddress;
+        msg.connectfirst = true;
+        client->sendNetMsgSynchronousTCP(msg);
         theGUI->connected = true;
     }
 
