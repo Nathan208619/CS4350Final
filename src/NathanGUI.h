@@ -5,7 +5,7 @@
 #include "AftrImGuiIncludes.h"
 #include "irrKlang.h"
 
-	
+
 namespace Aftr
 {
 	class NathanGUI : public WOImGuiAbstract

@@ -145,7 +145,7 @@ void GLViewNewModule::updateWorld()
         ////client = NetMessengerClient::New(IPaddress, "12683");
         //client = NetMessengerClient::New("127.0.0.1", "12683");
 
-        client = NetMessengerClient::New("127.0.0.1", "12685");
+        client = NetMessengerClient::New("127.0.0.1", "12683");
         theGUI->connected = true;
     }
 
