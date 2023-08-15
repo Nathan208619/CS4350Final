@@ -103,8 +103,6 @@ void NathanMsg::onMessageArrived()
 	}
 	if (connectfirst == true)
 	{
-		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->beginGame = true;
-		ManagerGLView::getGLViewT<GLViewNewModule>()->theGUI->firstPlayer = true;
 		ManagerGLView::getGLViewT<GLViewNewModule>()->client = NetMessengerClient::New(address, "12685");
 		ManagerGLView::getGLViewT<GLViewNewModule>()->secondPlayerConnected = true;
 	}
