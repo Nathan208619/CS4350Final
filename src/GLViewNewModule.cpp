@@ -625,14 +625,6 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    if (key.keysym.sym == SDLK_LCTRL)
    {
        pressLctrl = false;
-       std::string name = client->getLocalIpAddressesStrings();
-       std::cout << name << std::endl;
-       auto n = name.rfind(":");
-       name = name.substr(0, n);
-       std::cout << "**************************" << std::endl;
-       auto y = name.rfind(":");
-       name = name.substr(y + 3);
-       std::cout << name << std::endl;
    }
 }
 
@@ -867,10 +859,9 @@ void Aftr::GLViewNewModule::loadMap()
    countdownEngine = irrklang::createIrrKlangDevice();
    countdownString = ManagerEnvironmentConfiguration::getLMM() + "sounds/countdown.mp3";
 
-   //setJetCPUPath();
-   //setspaceShipCPUPath();
+   setJetCPUPath();
+   setspaceShipCPUPath();
    CPUindex = 0;
-
 }
 
 
@@ -1148,7 +1139,6 @@ void Aftr::GLViewNewModule::multiplayerReset()
 }
 void Aftr::GLViewNewModule::setJetCPUPath()
 {
-    /*
     jetCPUPath = { (Mat4("1.000 0.000 0.000  62.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
 (Mat4("1.000 0.000 0.000  64.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
 (Mat4("1.000 0.000 0.000  66.000 \n 0.000 1.000 0.000 -15.000 \n 0.000 0.000 1.000   2.000 \n 0.000 0.000 0.000   1.000", true)),
@@ -7828,12 +7818,12 @@ void Aftr::GLViewNewModule::setJetCPUPath()
 (Mat4("0.991 -0.133 -0.000 119.707 \n 0.133  0.991 -0.000  -3.935 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.991 -0.133 -0.000 121.689 \n 0.133  0.991 -0.000  -3.669 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.991 -0.133 -0.000 121.689 \n 0.133  0.991 -0.000  -3.669 \n 0.000  0.000  1.000  16.339 \n 0.000  0.000  0.000   1.00", true))};
-    */
+    
 }
 
 void Aftr::GLViewNewModule::setspaceShipCPUPath()
 {
-    /*
+   
 spaceShipCPUPath = 
 {(Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
 (Mat4("1.000 0.000 0.000 62.000 \n 0.000 1.000 0.000 15.000 \n 0.000 0.000 1.000  2.000 \n 0.000 0.000 0.000  1.000", true)),
@@ -14864,5 +14854,4 @@ spaceShipCPUPath =
 (Mat4("0.960 -0.279 -0.000 124.330 \n 0.279  0.960  0.000   4.096 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.960 -0.279 -0.000 124.330 \n 0.279  0.960  0.000   4.096 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true)),
 (Mat4("0.960 -0.279 -0.000 126.250 \n 0.279  0.960  0.000   4.654 \n 0.000 -0.000  1.000  30.108 \n 0.000  0.000  0.000   1.000", true))};
-*/
 }
